@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Error from "../views/Error.tsx";
 import Quiz from "../views/Quiz.tsx";
 import Bookmark from "../views/Bookmark.tsx";
-import App from "../App";
+import App from "../App.tsx";
 
 const AppRouter = createBrowserRouter([
   {

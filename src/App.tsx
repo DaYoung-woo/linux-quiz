@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
+import logo from "./assets/img/logo.svg";
 function App() {
+  const [show, setShow] = useState(false);
+
+  setTimeout(() => setShow(true), 1000);
   return (
     <div className="App">
-      app
-      <Outlet />
+      {!show && <img src={logo} />}
+      {show && <Outlet />}
     </div>
   );
 }
