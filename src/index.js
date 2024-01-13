@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css";
+import "./index.scss";
 import { createRoot } from "react-dom/client";
 import AppRouter from "./utils/router.tsx";
 import { RouterProvider } from "react-router-dom";

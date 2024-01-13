@@ -4,7 +4,7 @@ import logo from "./assets/img/logo.svg";
 function App() {
   const [show, setShow] = useState(false);
 
-  setTimeout(() => setShow(true), 1000);
+  setTimeout(() => setShow(true), 2000);
   return (
     <div className="App">
       {!show && <img src={logo} />}
