@@ -1,9 +1,10 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Error from "../views/Error.tsx";
-import Quiz from "../views/Quiz.tsx";
-import Bookmark from "../views/Bookmark.tsx";
-import App from "../App.tsx";
+import Error from "../views/Error";
+import Quiz from "../views/Quiz";
+import Bookmark from "../views/Bookmark";
+import App from "../App";
+import AdminLogin from "../views/admin/login";
 
 const AppRouter = createBrowserRouter([
   {
@@ -24,6 +25,12 @@ const AppRouter = createBrowserRouter([
         element: <Quiz />,
       },
     ],
+  },
+  {
+    path: "/admin",
+    errorElement: <Error />,
+    element: <App />,
+    children: [{ index: true, element: <AdminLogin /> }],
   },
 ]);
 
