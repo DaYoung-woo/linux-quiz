@@ -1,6 +1,7 @@
 html,
 #root,
-.App {
+.App,
+.app-cover {
   height: 100vh;
 }
 
@@ -9,7 +10,16 @@ body {
   height: 100vh;
 }
 
-.App {
+header {
+  height: 40px;
+  background-color: #ddd;
+}
+
+.App.dark {
+  background-color: #444;
+}
+
+.app-cover {
   display: flex;
   align-items: center;
   justify-content: center;
