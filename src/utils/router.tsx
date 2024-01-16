@@ -6,7 +6,7 @@ import Bookmark from "../views/Bookmark";
 import App from "../App";
 import AdminLogin from "../views/admin/Login";
 import AdminApp from "../views/admin/App";
-
+import AdminQuiz from "../views/admin/Quiz";
 const AppRouter = createBrowserRouter([
   {
     path: "/",
@@ -31,7 +31,10 @@ const AppRouter = createBrowserRouter([
     path: "/admin",
     errorElement: <Error />,
     element: <AdminApp />,
-    children: [{ index: true, element: <AdminLogin /> }],
+    children: [
+      { index: true, element: <AdminLogin /> },
+      { path: "quiz", element: <AdminQuiz /> },
+    ],
   },
 ]);
 

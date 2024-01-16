@@ -3,15 +3,15 @@ import {
   getAuth,
   signInWithRedirect,
   GoogleAuthProvider,
-  getRedirectResult,
+  onAuthStateChanged,
 } from "firebase/auth";
 import googleLogin from "../../assets/img/googloLogin.svg";
-
+import { useNavigate } from "react-router-dom";
 function AdminLogin() {
   const firebaseConfig = {
     apiKey: "AIzaSyCPivEkcQA7PTYXfHsvW5mXyYXqjWsiglc",
     authDomain: "linux-quiz-9dec9.firebaseapp.com",
-    storageBucket: "linux-quiz-9dec9.appspot.com",
+    storageBucket: "linux-quiz-9dec9a.appspot.com",
     messagingSenderId: "141017420789",
     appId: "1:141017420789:web:ba3239850c3ad2c09f46bc",
     measurementId: "G-NZP9JJ3RFL",
@@ -27,27 +27,17 @@ function AdminLogin() {
         console.log(userCredential);
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        console.log(error);
       });
 
-  getRedirectResult(auth)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-
-      // The signed-in user info.
-      const user = result.user;
+  const navigate = useNavigate();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
       console.log(user);
-      // IdP data available using getAdditionalUserInfo(result)
-      // ...
-    })
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      // ...
-    });
+      navigate("/admin/quiz");
+    }
+  });
+
   return (
     <div className="h-full flex w-72 m-auto">
       <img src={googleLogin} alt="googleLogin" onClick={login} />
