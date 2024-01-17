@@ -1,11 +1,11 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithRedirect, onAuthStateChanged } from "firebase/auth";
-import { ApiContext } from "../../context/ApiContext";
+import { AuthContext } from "../../context/AuthContext";
 import googleLogin from "../../assets/img/googloLogin.svg";
 
 function AdminLogin() {
-  const { provider, auth } = useContext(ApiContext);
+  const { provider, auth } = useContext(AuthContext);
 
   const login = () =>
     signInWithRedirect(auth, provider)

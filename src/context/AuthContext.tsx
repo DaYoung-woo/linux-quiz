@@ -14,12 +14,12 @@ const app = initializeApp(firebaseConfig);
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
-export const ApiContext = createContext({ app, provider, auth });
+export const AuthContext = createContext({ app, provider, auth });
 
 export const ApiProvider = ({ children }) => {
   return (
-    <ApiContext.Provider value={{ app, provider, auth }}>
+    <AuthContext.Provider value={{ app, provider, auth }}>
       {children}
-    </ApiContext.Provider>
+    </AuthContext.Provider>
   );
 };
