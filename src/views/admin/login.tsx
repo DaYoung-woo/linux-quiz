@@ -1,33 +1,18 @@
-import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  signInWithRedirect,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-} from "firebase/auth";
-import googleLogin from "../../assets/img/googloLogin.svg";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-function AdminLogin() {
-  const firebaseConfig = {
-    apiKey: "AIzaSyCPivEkcQA7PTYXfHsvW5mXyYXqjWsiglc",
-    authDomain: "linux-quiz-9dec9.firebaseapp.com",
-    storageBucket: "linux-quiz-9dec9a.appspot.com",
-    messagingSenderId: "141017420789",
-    appId: "1:141017420789:web:ba3239850c3ad2c09f46bc",
-    measurementId: "G-NZP9JJ3RFL",
-  };
+import { signInWithRedirect, onAuthStateChanged } from "firebase/auth";
+import { ApiContext } from "../../context/ApiContext";
+import googleLogin from "../../assets/img/googloLogin.svg";
 
-  const app = initializeApp(firebaseConfig);
-  const provider = new GoogleAuthProvider();
-  const auth = getAuth(app);
+function AdminLogin() {
+  const { provider, auth } = useContext(ApiContext);
 
   const login = () =>
     signInWithRedirect(auth, provider)
       .then((userCredential) => {
         console.log(userCredential);
       })
-      .catch((error) => { 
+      .catch((error) => {
         setShow(!show);
       });
 
