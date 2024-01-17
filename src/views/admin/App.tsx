@@ -1,16 +1,24 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { user } from "../../utils/firebase";
+import { auth } from "../../utils/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import logo from "../../assets/img/logo.svg";
-import logout from "../../assets/img/logout.svg";
+import Header from "../../components/admin/frame/Header";
 
 function App() {
-  const photoURL = localStorage.getItem("photoURL");
+  const [user, setUser] = useState(null);
   const naviagte = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
-    if (!user) naviagte("/admin");
+    onAuthStateChanged(auth, (userInfo) => {
+      setUser(userInfo);
+      if (!userInfo) naviagte("/admin");
+      if (userInfo && location.pathname === "/admin") naviagte("/admin/quiz");
+    });
   }, []);
+
   return (
     <>
       {user && (
@@ -30,19 +38,15 @@ function App() {
               </ul>
             </nav>
             <main>
-              <header className="h-16 ">
-                <img src={logout} alt="logout" className="w-6 mr-2" />
-                <img
-                  src={photoURL}
-                  alt="logo"
-                  className="w-8 rounded-full mr-4"
-                />
-              </header>
-              <Outlet />
+              <Header />
+              <div className="main-content">
+                <Outlet />
+              </div>
             </main>
           </div>
         </div>
       )}
+
       {!user && <Outlet />}
     </>
   );

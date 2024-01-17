@@ -1,14 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { signInWithRedirect } from "firebase/auth";
+import { signInWithRedirect, getRedirectResult } from "firebase/auth";
 import { auth, provider } from "../../utils/firebase";
 
 import googleLogin from "../../assets/img/googloLogin.svg";
 
 function AdminLogin() {
   const navigate = useNavigate();
-  const login = () =>
-    signInWithRedirect(auth, provider).catch(() => {
-      alert("에러가 발생했습니다");
+  const login = () => signInWithRedirect(auth, provider);
+
+  getRedirectResult(auth)
+    .then((res) => {
+      if (res) navigate("/admin/quiz");
+    })
+    .catch(() => {
+      alert("권한이 없습니다.");
     });
 
   return (
