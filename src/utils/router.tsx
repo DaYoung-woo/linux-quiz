@@ -1,4 +1,3 @@
-import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import Error from "../views/Error";
 import Quiz from "../views/Quiz";
@@ -32,8 +31,14 @@ const AppRouter = createBrowserRouter([
     errorElement: <Error />,
     element: <AdminApp />,
     children: [
-      { index: true, element: <AdminLogin /> },
-      { path: "quiz", element: <AdminQuiz /> },
+      {
+        index: true,
+        element: <AdminLogin />,
+      },
+      {
+        path: "quiz",
+        element: <AdminQuiz />,
+      },
     ],
   },
 ]);

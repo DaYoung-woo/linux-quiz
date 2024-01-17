@@ -1,37 +1,19 @@
-import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithRedirect, onAuthStateChanged } from "firebase/auth";
-import { AuthContext } from "../../context/AuthContext";
+import { signInWithRedirect } from "firebase/auth";
+import { auth, provider } from "../../utils/firebase";
+
 import googleLogin from "../../assets/img/googloLogin.svg";
 
 function AdminLogin() {
-  const { provider, auth } = useContext(AuthContext);
-
-  const login = () =>
-    signInWithRedirect(auth, provider)
-      .then((userCredential) => {
-        console.log(userCredential);
-      })
-      .catch((error) => {
-        setShow(!show);
-      });
-
   const navigate = useNavigate();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log(user);
-      navigate("/admin/quiz");
-    }
-  });
+  const login = () =>
+    signInWithRedirect(auth, provider).catch(() => {
+      alert("에러가 발생했습니다");
+    });
 
-  const [show, setShow] = useState(false);
   return (
-    <div>
-      {show && (
-        <div className="h-full flex w-72 m-auto">
-          <img src={googleLogin} alt="googleLogin" onClick={login} />
-        </div>
-      )}
+    <div className="h-full flex w-72 m-auto">
+      <img src={googleLogin} alt="googleLogin" onClick={login} />
     </div>
   );
 }
