@@ -1,6 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+  font-family: "Noto Sans KR", sans-serif;
+}
 
 html,
 #root,
@@ -16,7 +21,6 @@ body {
 
 header {
   height: 40px;
-  background-color: #ddd;
 }
 
 .App.dark {
@@ -27,4 +31,32 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.admin-app {
+  header {
+    border-bottom: 1px solid #ddd;
+    height: 62px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-items: center;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .admin-app-body {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 100vh;
+    nav {
+      border-right: 1px solid #ddd;
+      ul {
+        margin-top: 20px;
+        li {
+          padding: 15px 20px;
+        }
+      }
+    }
+  }
 }

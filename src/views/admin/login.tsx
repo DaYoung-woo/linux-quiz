@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import googleLogin from "../../assets/img/googloLogin.svg";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 function AdminLogin() {
   const firebaseConfig = {
     apiKey: "AIzaSyCPivEkcQA7PTYXfHsvW5mXyYXqjWsiglc",
@@ -26,8 +27,8 @@ function AdminLogin() {
       .then((userCredential) => {
         console.log(userCredential);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((error) => { 
+        setShow(!show);
       });
 
   const navigate = useNavigate();
@@ -38,9 +39,14 @@ function AdminLogin() {
     }
   });
 
+  const [show, setShow] = useState(false);
   return (
-    <div className="h-full flex w-72 m-auto">
-      <img src={googleLogin} alt="googleLogin" onClick={login} />
+    <div>
+      {show && (
+        <div className="h-full flex w-72 m-auto">
+          <img src={googleLogin} alt="googleLogin" onClick={login} />
+        </div>
+      )}
     </div>
   );
 }
