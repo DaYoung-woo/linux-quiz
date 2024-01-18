@@ -1,4 +1,4 @@
-import logoutImg from "../../../assets/img/logout.svg";
+import { ReactComponent as LogoutImg } from "../../../assets/img/logout.svg";
 import { logOut } from "../../../utils/firebase";
 import { useNavigate } from "react-router-dom";
 function Header() {
@@ -10,14 +10,9 @@ function Header() {
     });
   };
   return (
-    <header className="h-16 ">
-      <img
-        src={logoutImg}
-        alt="logout"
-        className="w-6 mr-2"
-        onClick={signout}
-      />
-      <img src={photoURL} alt="logo" className="w-8 rounded-full mr-4" />
+    <header className="h-16">
+      <LogoutImg onClick={signout} fill="#4b5563" className="mr-2" />
+      <img src={photoURL} alt="logo" className="w-10 rounded-full mr-4" />
     </header>
   );
 }

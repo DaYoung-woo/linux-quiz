@@ -10,7 +10,7 @@ function AdminLogin() {
 
   getRedirectResult(auth)
     .then((res) => {
-      if (res) navigate("/admin/quiz");
+      if (res) navigate("/admin/dashboard");
     })
     .catch(() => {
       alert("권한이 없습니다.");

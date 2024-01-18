@@ -6,6 +6,7 @@ import App from "../App";
 import AdminLogin from "../views/admin/Login";
 import AdminApp from "../views/admin/App";
 import AdminQuiz from "../views/admin/Quiz";
+import AdminDashBoard from "../views/admin/Dashboard";
 const AppRouter = createBrowserRouter([
   {
     path: "/",
@@ -38,6 +39,10 @@ const AppRouter = createBrowserRouter([
       {
         path: "quiz",
         element: <AdminQuiz />,
+      },
+      {
+        path: "dashboard",
+        element: <AdminDashBoard />,
       },
     ],
   },

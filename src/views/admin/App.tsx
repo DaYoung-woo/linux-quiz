@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { auth } from "../../utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import logo from "../../assets/img/logo.svg";
 import Header from "../../components/admin/frame/Header";
+import Navi from "../../components/admin/frame/Navi";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -15,7 +15,8 @@ function App() {
     onAuthStateChanged(auth, (userInfo) => {
       setUser(userInfo);
       if (!userInfo) naviagte("/admin");
-      if (userInfo && location.pathname === "/admin") naviagte("/admin/quiz");
+      if (userInfo && location.pathname === "/admin")
+        naviagte("/admin/dashboard");
     });
   }, []);
 
@@ -24,19 +25,7 @@ function App() {
       {user && (
         <div className={`admin-app mx-auto `}>
           <div className="admin-app-body">
-            <nav>
-              <ul>
-                <li className="flex justify-center">
-                  <img src={logo} alt="logo" className="w-16 basic-button" />
-                </li>
-                <li>
-                  <a href="#">문제 관리</a>
-                </li>
-                <li>
-                  <a href="#">로그 관리</a>
-                </li>
-              </ul>
-            </nav>
+            <Navi />
             <main>
               <Header />
               <div className="main-content">
