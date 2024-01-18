@@ -28,8 +28,31 @@ h1 {
   font-weight: 500;
 }
 
+h4 {
+  font-size: 16px;
+  font-weight: 500;
+}
+
 select option[value=""][disabled] {
   display: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 8px !important;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 6px;
+  transition: background-color 0.2s linear, width 0.2s ease-in-out;
+  -webkit-transition: background-color 0.2s linear, width 0.2s ease-in-out;
+  width: 6px;
+  right: 2px;
+  position: absolute;
+}
+::-webkit-scrollbar-track {
+  background-color: #fff;
 }
 
 .App.dark {
@@ -68,10 +91,14 @@ select option[value=""][disabled] {
       }
     }
     main {
-      .main-content {
-        padding: 60px 20px;
-        max-width: 1200px;
-        margin: 0 auto;
+      .main-scroll-area {
+        height: calc(100vh - 69px);
+        overflow-y: scroll;
+        .main-content {
+          padding: 60px 20px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
       }
     }
   }

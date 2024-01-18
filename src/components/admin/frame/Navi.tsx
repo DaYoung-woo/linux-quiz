@@ -27,7 +27,7 @@ function Navi() {
           <img src={logo} alt="logo" className="w-20 basic-button" />
         </li>
         {menuList.map(({ to, title }) => (
-          <Link to={to}>
+          <Link to={to} key={title}>
             <li
               className={
                 (active.includes(to) && "text-indigo-500 bg-slate-100") ||

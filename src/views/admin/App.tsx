@@ -28,8 +28,10 @@ function App() {
             <Navi />
             <main>
               <Header />
-              <div className="main-content">
-                <Outlet />
+              <div className="main-scroll-area">
+                <div className="main-content">
+                  <Outlet />
+                </div>
               </div>
             </main>
           </div>
