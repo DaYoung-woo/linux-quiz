@@ -1,6 +1,6 @@
-import { collection, addDoc } from "firebase/firestore";
 import { db } from "./Firebase";
+import { ref, set } from "firebase/database";
 
 export const addQuizApi = (param) => {
-  return addDoc(collection(db, "quizList"), param);
+  return set(ref(db, "quiz_list/" + param.id), param);
 };

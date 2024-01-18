@@ -1,4 +1,5 @@
 import { addQuizApi } from "../../../api/Api";
+import { v4 as uuidv4 } from "uuid";
 
 function QuizForm() {
   const getFile = (e) => {
@@ -16,9 +17,15 @@ function QuizForm() {
       subject: 1,
       answer: 3,
       desc: "",
+      id: uuidv4(),
     };
-    const res = await addQuizApi(param);
-    console.log(res);
+
+    try {
+      const res = await addQuizApi(param);
+      console.log(res);
+    } catch (e) {
+      alert("문제가 발생했어요. 관리자에게 문의해주세요💕");
+    }
   };
 
   return (

@@ -7,22 +7,30 @@ import Header from "../../components/admin/frame/Header";
 import Navi from "../../components/admin/frame/Navi";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({ email: "iamwooda0@gmail.com" });
   const naviagte = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     onAuthStateChanged(auth, (userInfo) => {
-      setUser(userInfo);
-      if (!userInfo) naviagte("/admin");
-      if (userInfo && location.pathname === "/admin")
-        naviagte("/admin/dashboard");
+      if (
+        userInfo.email === "iamwooda0@gmail.com" &&
+        location.pathname.includes("/admin")
+      ) {
+        if (location.pathname === "/admin") {
+          setUser(userInfo);
+          naviagte("/admin/dashboard");
+        }
+      } else {
+        alert("권한이 없습니다.");
+        naviagte("/admin");
+      }
     });
   }, []);
 
   return (
     <>
-      {user && (
+      {user?.email === "iamwooda0@gmail.com" && (
         <div className={`admin-app mx-auto `}>
           <div className="admin-app-body">
             <Navi />
