@@ -1,5 +1,5 @@
 import { ReactComponent as LogoutImg } from "../../../assets/img/logout.svg";
-import { logOut } from "../../../utils/firebase";
+import { logOut } from "../../../api/Firebase";
 import { useNavigate } from "react-router-dom";
 function Header() {
   const photoURL = localStorage.getItem("photoURL");

@@ -1,14 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
+import { addQuizApi } from "../../../api/Api";
+
 function QuizForm() {
   const getFile = (e) => {
     console.log(e);
   };
 
-  const fetchTodoList = () => {};
-  const { isPending, isError, data, error } = useQuery({
-    queryKey: ["todos"],
-    queryFn: fetchTodoList,
-  });
+  const submitForm = async (e) => {
+    e.preventDefault();
+    const param = {
+      title:
+        "다음 중 리눅스에서 사용되는 온라인 패키지 관리 도구로 거리가 먼 것은?",
+      year: 2024,
+      order: 1,
+      quizNum: 1,
+      subject: 1,
+      answer: 3,
+      desc: "",
+    };
+    const res = await addQuizApi(param);
+    console.log(res);
+  };
 
   return (
     <div className="quiz-form">
@@ -22,7 +33,7 @@ function QuizForm() {
               required
               className="mr-4 border rounded-full px-2 py-1"
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 년도
               </option>
               <option value="2024">2024</option>
@@ -36,7 +47,7 @@ function QuizForm() {
               required
               className="mr-4 border rounded-full px-2 py-1"
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 회차
               </option>
               <option value="2024">1</option>
@@ -48,7 +59,7 @@ function QuizForm() {
               required
               className="mr-4 border rounded-full px-2 py-1"
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 문제 번호
               </option>
               <option value="2024">1</option>
@@ -56,7 +67,10 @@ function QuizForm() {
               <option value="2022">3</option>
             </select>
           </article>
-          <button className="flex items-center px-8 py-2 bg-indigo-500 rounded-md text-slate-50">
+          <button
+            className="flex items-center px-8 py-2 bg-indigo-500 rounded-md text-slate-50"
+            onClick={(e) => submitForm(e)}
+          >
             문제 추가
           </button>
         </div>

@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { auth } from "../../utils/firebase";
+import { auth } from "../../api/Firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Header from "../../components/admin/frame/Header";
 import Navi from "../../components/admin/frame/Navi";

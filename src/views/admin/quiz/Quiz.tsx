@@ -9,6 +9,8 @@ function Quiz() {
       order: 1,
       quizNum: 1,
       subject: 1,
+      answer: 3,
+      desc: "",
     },
     {
       title: "adf",
