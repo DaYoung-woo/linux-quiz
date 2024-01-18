@@ -5,7 +5,8 @@ import Bookmark from "../views/Bookmark";
 import App from "../App";
 import AdminLogin from "../views/admin/Login";
 import AdminApp from "../views/admin/App";
-import AdminQuiz from "../views/admin/Quiz";
+import AdminQuiz from "../views/admin/quiz/Quiz";
+import AdminQuizForm from "../views/admin/quiz/QuizForm";
 import AdminDashBoard from "../views/admin/Dashboard";
 const AppRouter = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const AppRouter = createBrowserRouter([
       {
         path: "dashboard",
         element: <AdminDashBoard />,
+      },
+      {
+        path: "quiz_form",
+        element: <AdminQuizForm />,
       },
     ],
   },

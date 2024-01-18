@@ -1,9 +1,5 @@
-import quizAdd from "../../assets/img/quiz_add.svg";
-import Modal from "react-modal";
-import { useState } from "react";
-import { modalStyles } from "../../utils/styles";
-Modal.setAppElement("#root");
-
+import { ReactComponent as QuizAdd } from "../../../assets/img/quiz_add.svg";
+import { Link } from "react-router-dom";
 function Quiz() {
   const quizList = [
     {
@@ -22,15 +18,6 @@ function Quiz() {
       subject: 1,
     },
   ];
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
   return (
     <div>
       <h1>문제 관리</h1>
@@ -40,13 +27,12 @@ function Quiz() {
           className="bg-slate-50 rounded-full border px-5 active:border-stone-100"
           placeholder="검색"
         />
-        <button
-          className="flex items-center px-8 py-2 bg-indigo-500 rounded-md text-slate-50"
-          onClick={openModal}
-        >
-          <img src={quizAdd} alt="quizAdd" className="pr-2" />
-          문제 추가
-        </button>
+        <Link to="/admin/quiz_form">
+          <button className="flex items-center px-8 py-2 bg-indigo-500 rounded-md text-slate-50">
+            <QuizAdd className="mr-2" />
+            문제 추가
+          </button>
+        </Link>
       </div>
       <ul className="quiz-list">
         {quizList.map(({ title, year, order, quizNum, subject }) => (
@@ -63,15 +49,6 @@ function Quiz() {
           </li>
         ))}
       </ul>
-
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={modalStyles}
-        contentLabel="Example Modal"
-      >
-        
-      </Modal>
     </div>
   );
 }

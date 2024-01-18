@@ -28,6 +28,10 @@ h1 {
   font-weight: 500;
 }
 
+select option[value=""][disabled] {
+  display: none;
+}
+
 .App.dark {
   background-color: #444;
 }
