@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { auth } from "../../api/Firebase";
+import { auth } from "../../utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Header from "../../components/admin/frame/Header";
 import Navi from "../../components/admin/frame/Navi";
@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (userInfo) => {
       if (
-        userInfo.email === "iamwooda0@gmail.com" &&
+        userInfo?.email === "iamwooda0@gmail.com" &&
         location.pathname.includes("/admin")
       ) {
         if (location.pathname === "/admin") {
@@ -22,10 +22,13 @@ function App() {
           naviagte("/admin/dashboard");
         }
       } else {
-        alert("권한이 없습니다.");
-        naviagte("/admin");
+        if (location.pathname !== "/admin") {
+          alert("권한이 없습니다.");
+          naviagte("/admin");
+        }
       }
     });
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -46,7 +49,7 @@ function App() {
         </div>
       )}
 
-      {!user && <Outlet />}
+      {user?.email !== "iamwooda0@gmail.com" && <Outlet />}
     </>
   );
 }

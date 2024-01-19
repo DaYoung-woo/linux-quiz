@@ -111,7 +111,7 @@ textarea:focus {
     }
     main {
       .main-scroll-area {
-        height: calc(100vh - 69px);
+        height: calc(100vh - 44px);
         overflow-y: scroll;
         .main-content {
           padding: 40px 60px;
@@ -128,7 +128,7 @@ ul.quiz-list {
   li {
     padding: 15px 20px;
     display: grid;
-    grid-template-columns: 20px 600px 1fr;
+    grid-template-columns: 20px 1fr 20px;
     align-items: center;
     border: 1px solid #ddd;
     border-radius: 0.5;

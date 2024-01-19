@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { signInWithRedirect, getRedirectResult } from "firebase/auth";
-import { auth, provider } from "../../api/Firebase";
+import { auth, provider } from "../../utils/firebase";
 
 import googleLogin from "../../assets/img/googloLogin.svg";
 

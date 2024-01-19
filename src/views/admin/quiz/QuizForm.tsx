@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
-import { addQuizApi } from "../../../api/Api";
+import { addQuizApi } from "../../../api/api";
 import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
 import AlertPopup from "../../../components/common/AlertPopup";
 
@@ -205,19 +205,21 @@ function QuizForm() {
             value={formData.desc}
             onChange={handleChange}
           />
-          <button
-            className="mt-2 flex items-center pl-7 pr-8 py-2 bg-indigo-500 rounded-md text-slate-50 disabled:bg-slate-200 disabled:text-slate-400 float-right"
-            onClick={(e) => submitForm(e)}
-            disabled={btnDisabled}
-          >
-            <Plus
-              fill={btnDisabled ? "#94a3b8" : "#ffffff"}
-              width="24px"
-              height="24px"
-              className="mr-2 "
-            />
-            문제 등록
-          </button>
+          <div className="flex justify-end">
+            <button
+              className="mt-2 flex items-center pl-7 pr-8 py-2 bg-indigo-500 rounded-md text-slate-50 disabled:bg-slate-200 disabled:text-slate-400"
+              onClick={(e) => submitForm(e)}
+              disabled={btnDisabled}
+            >
+              <Plus
+                fill={btnDisabled ? "#94a3b8" : "#ffffff"}
+                width="24px"
+                height="24px"
+                className="mr-2 "
+              />
+              문제 등록
+            </button>
+          </div>
         </div>
       </form>
       <AlertPopup
