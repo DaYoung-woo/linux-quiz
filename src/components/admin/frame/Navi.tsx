@@ -30,7 +30,7 @@ function Navi() {
           <Link to={to} key={title}>
             <li
               className={
-                (active.includes(to) && "text-indigo-500 bg-slate-100") ||
+                (active.includes(to) && "text-indigo-500 bg-slate-200") ||
                 "hover:bg-slate-50"
               }
             >

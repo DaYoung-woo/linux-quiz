@@ -28,6 +28,11 @@ h1 {
   font-weight: 500;
 }
 
+h2 {
+  font-size: 20px;
+  font-weight: 500;
+}
+
 h4 {
   font-size: 16px;
   font-weight: 500;
@@ -35,6 +40,19 @@ h4 {
 
 select option[value=""][disabled] {
   display: none;
+}
+
+input.basic-input,
+textarea.basic-input {
+  border: 1px solid #e2e8f0;
+  width: 100%;
+  padding: 8px 12px;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: 1px solid #334155;
+  border: none;
 }
 
 ::-webkit-scrollbar {

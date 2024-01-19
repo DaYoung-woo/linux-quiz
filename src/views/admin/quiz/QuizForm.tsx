@@ -1,31 +1,85 @@
-import { addQuizApi } from "../../../api/Api";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
+import { addQuizApi } from "../../../api/Api";
+import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
+import AlertPopup from "../../../components/common/AlertPopup";
 
 function QuizForm() {
+  const defaultQuiz = {
+    year: "",
+    order: "",
+    quizNum: "",
+    title: "",
+    distractor1: "",
+    distractor2: "",
+    distractor3: "",
+    distractor4: "",
+    desc: "",
+    answer: "",
+  };
+  const years = [2024, 2023, 2022, 2021, 2020];
+  const [addAlert, setAddAlert] = useState(false);
+  const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
+  const [btnDisabled, setDisabled] = useState(true);
+
+  const navigation = useNavigate();
+
+  // 모달 닫고 메인 화면 이동
+  const closeAddAlert = () => {
+    setAddAlert(false);
+    navigation("/admin/quiz");
+  };
+
   const getFile = (e) => {
     console.log(e);
   };
 
-  const submitForm = async (e) => {
+  // 저장 버튼 클릭
+  const submitForm = (e) => {
     e.preventDefault();
-    const param = {
-      title:
-        "다음 중 리눅스에서 사용되는 온라인 패키지 관리 도구로 거리가 먼 것은?",
-      year: 2024,
-      order: 1,
-      quizNum: 1,
-      subject: 1,
-      answer: 3,
-      desc: "",
-      id: uuidv4(),
-    };
+    addQuiz();
+  };
 
+  // 저장 api 요청
+  const addQuiz = async () => {
+    const param = {
+      id: !!formData.id && uuidv4(),
+      answer: formData.answer,
+      year: formData.year,
+      order: formData.order,
+      quizNum: formData.quizNum,
+      title: formData.title,
+      distractor1: formData.distractor1,
+      distractor2: formData.distractor2,
+      distractor3: formData.distractor3,
+      distractor4: formData.distractor4,
+      desc: formData.desc,
+    };
     try {
       const res = await addQuizApi(param);
       console.log(res);
+      setAddAlert(true);
+      setInterval(() => closeAddAlert(), 2000);
     } catch (e) {
-      alert("문제가 발생했어요. 관리자에게 문의해주세요💕");
+      alert("문제가 발생했어요😭");
     }
+  };
+
+  // 폼 입력 값 변경 핸들러
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const newFormData = {
+      ...formData,
+      [name]: value,
+    };
+    setFormData(newFormData);
+
+    const valid = Object.keys(newFormData)
+      .filter((el) => el !== "id")
+      .find((el) => !newFormData[el]);
+    console.log(valid);
+    setDisabled(!!valid);
   };
 
   return (
@@ -37,32 +91,38 @@ function QuizForm() {
           <article>
             <select
               name="year"
+              value={formData.year}
+              onChange={handleChange}
               required
               className="mr-4 border rounded-full px-2 py-1"
             >
               <option value="" disabled>
                 년도
               </option>
-              <option value="2024">2024</option>
-              <option value="2023">2023</option>
-              <option value="2022">2022</option>
-              <option value="2021">2021</option>
-              <option value="2020">2020</option>
+              {years.map((el) => (
+                <option value={el} key={el}>
+                  {el}
+                </option>
+              ))}
             </select>
             <select
-              name="year"
+              name="order"
+              value={formData.order}
+              onChange={handleChange}
               required
               className="mr-4 border rounded-full px-2 py-1"
             >
               <option value="" disabled>
                 회차
               </option>
-              <option value="2024">1</option>
-              <option value="2023">2</option>
-              <option value="2022">3</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
             </select>
             <select
-              name="year"
+              name="quizNum"
+              value={formData.quizNum}
+              onChange={handleChange}
               required
               className="mr-4 border rounded-full px-2 py-1"
             >
@@ -75,10 +135,17 @@ function QuizForm() {
             </select>
           </article>
           <button
-            className="flex items-center px-8 py-2 bg-indigo-500 rounded-md text-slate-50"
+            className="flex items-center pl-7 pr-8 py-2 bg-indigo-500 rounded-md text-slate-50 disabled:bg-slate-200 disabled:text-slate-400"
             onClick={(e) => submitForm(e)}
+            disabled={btnDisabled}
           >
-            문제 추가
+            <Plus
+              fill={btnDisabled ? "#94a3b8" : "#ffffff"}
+              width="24px"
+              height="24px"
+              className="mr-2 "
+            />
+            문제 등록
           </button>
         </div>
         <div className="mt-6">
@@ -86,7 +153,10 @@ function QuizForm() {
           <input
             type="text"
             placeholder="문제"
-            className="border px-4 py-2 w-full "
+            className="basic-input"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
           />
           <input
             type="file"
@@ -100,32 +170,69 @@ function QuizForm() {
           <input
             type="text"
             placeholder="보기1"
-            className="border px-4 py-2 w-full mt-4"
+            className="basic-input mt-4"
+            name="distractor1"
+            value={formData.distractor1}
+            onChange={handleChange}
           />
           <input
             type="text"
             placeholder="보기2"
-            className="border px-4 py-2 w-full mt-4"
+            className="basic-input mt-4"
+            name="distractor2"
+            value={formData.distractor2}
+            onChange={handleChange}
           />
           <input
             type="text"
             placeholder="보기3"
-            className="border px-4 py-2 w-full mt-4"
+            className="basic-input mt-4"
+            name="distractor3"
+            value={formData.distractor3}
+            onChange={handleChange}
           />
           <input
             type="text"
             placeholder="보기4"
-            className="border px-4 py-2 w-full mt-4"
+            className="basic-input mt-4"
+            name="distractor4"
+            value={formData.distractor4}
+            onChange={handleChange}
           />
 
-          <h4 className="mt-6">해설</h4>
+          <h4 className="mt-6 flex items-center">
+            해설
+            <select
+              name="answer"
+              value={formData.answer}
+              onChange={handleChange}
+              required
+              className="ml-2 mr-4 border rounded-full px-2 py-1"
+            >
+              <option value="" disabled>
+                정답
+              </option>
+              <option value="2024">1</option>
+              <option value="2023">2</option>
+              <option value="2022">3</option>
+            </select>
+          </h4>
           <textarea
             placeholder="해설"
             className="border px-4 py-2 w-full mt-4"
             rows={10}
+            name="desc"
+            value={formData.desc}
+            onChange={handleChange}
           />
         </div>
       </form>
+      <AlertPopup
+        isOpen={addAlert}
+        onRequestClose={closeAddAlert}
+        title="문제를 성공적으로 저장했습니다."
+        desc="2초 뒤 자동으로 닫힙니다."
+      />
     </div>
   );
 }
