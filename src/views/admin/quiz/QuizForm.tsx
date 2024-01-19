@@ -19,6 +19,7 @@ function QuizForm() {
     answer: "",
   };
   const years = [2024, 2023, 2022, 2021, 2020];
+  const quizNums = Array.from({ length: 100 }, (_, index) => index + 1);
   const [addAlert, setAddAlert] = useState(false);
   const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
   const [btnDisabled, setDisabled] = useState(true);
@@ -44,23 +45,14 @@ function QuizForm() {
   // 저장 api 요청
   const addQuiz = async () => {
     const param = {
-      id: !!formData.id && uuidv4(),
-      answer: formData.answer,
-      year: formData.year,
-      order: formData.order,
-      quizNum: formData.quizNum,
-      title: formData.title,
-      distractor1: formData.distractor1,
-      distractor2: formData.distractor2,
-      distractor3: formData.distractor3,
-      distractor4: formData.distractor4,
-      desc: formData.desc,
+      id: !!formData.id || uuidv4(),
+      ...formData,
     };
     try {
       const res = await addQuizApi(param);
       console.log(res);
       setAddAlert(true);
-      setInterval(() => closeAddAlert(), 2000);
+      setTimeout(() => closeAddAlert(), 2000);
     } catch (e) {
       alert("문제가 발생했어요😭");
     }
@@ -87,67 +79,54 @@ function QuizForm() {
       <h1>문제 추가</h1>
 
       <form className="mt-5">
-        <div className="flex justify-between items-center">
-          <article>
-            <select
-              name="year"
-              value={formData.year}
-              onChange={handleChange}
-              required
-              className="mr-4 border rounded-full px-2 py-1"
-            >
-              <option value="" disabled>
-                년도
-              </option>
-              {years.map((el) => (
-                <option value={el} key={el}>
-                  {el}
-                </option>
-              ))}
-            </select>
-            <select
-              name="order"
-              value={formData.order}
-              onChange={handleChange}
-              required
-              className="mr-4 border rounded-full px-2 py-1"
-            >
-              <option value="" disabled>
-                회차
-              </option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
-            <select
-              name="quizNum"
-              value={formData.quizNum}
-              onChange={handleChange}
-              required
-              className="mr-4 border rounded-full px-2 py-1"
-            >
-              <option value="" disabled>
-                문제 번호
-              </option>
-              <option value="2024">1</option>
-              <option value="2023">2</option>
-              <option value="2022">3</option>
-            </select>
-          </article>
-          <button
-            className="flex items-center pl-7 pr-8 py-2 bg-indigo-500 rounded-md text-slate-50 disabled:bg-slate-200 disabled:text-slate-400"
-            onClick={(e) => submitForm(e)}
-            disabled={btnDisabled}
-          >
-            <Plus
-              fill={btnDisabled ? "#94a3b8" : "#ffffff"}
-              width="24px"
-              height="24px"
-              className="mr-2 "
-            />
-            문제 등록
-          </button>
-        </div>
+        <select
+          name="year"
+          value={formData.year}
+          onChange={handleChange}
+          required
+          className="mr-4 border rounded-full px-2 py-1"
+        >
+          <option value="" disabled>
+            년도
+          </option>
+          {years.map((el) => (
+            <option value={el} key={el}>
+              {el}
+            </option>
+          ))}
+        </select>
+        <select
+          name="order"
+          value={formData.order}
+          onChange={handleChange}
+          required
+          className="mr-4 border rounded-full px-2 py-1"
+        >
+          <option value="" disabled>
+            회차
+          </option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+        <select
+          name="quizNum"
+          value={formData.quizNum}
+          onChange={handleChange}
+          required
+          className="mr-4 border rounded-full px-2 py-1"
+        >
+          <option value="" disabled>
+            문제 번호
+          </option>
+
+          {quizNums.map((el) => (
+            <option value={el} key={el}>
+              {el}
+            </option>
+          ))}
+        </select>
+
         <div className="mt-6">
           <h4 className="mb-4">문제</h4>
           <input
@@ -212,9 +191,10 @@ function QuizForm() {
               <option value="" disabled>
                 정답
               </option>
-              <option value="2024">1</option>
-              <option value="2023">2</option>
-              <option value="2022">3</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
             </select>
           </h4>
           <textarea
@@ -225,6 +205,19 @@ function QuizForm() {
             value={formData.desc}
             onChange={handleChange}
           />
+          <button
+            className="mt-2 flex items-center pl-7 pr-8 py-2 bg-indigo-500 rounded-md text-slate-50 disabled:bg-slate-200 disabled:text-slate-400 float-right"
+            onClick={(e) => submitForm(e)}
+            disabled={btnDisabled}
+          >
+            <Plus
+              fill={btnDisabled ? "#94a3b8" : "#ffffff"}
+              width="24px"
+              height="24px"
+              className="mr-2 "
+            />
+            문제 등록
+          </button>
         </div>
       </form>
       <AlertPopup

@@ -12,7 +12,7 @@ function Header() {
   return (
     <header className="h-16">
       <LogoutImg onClick={signout} fill="#4b5563" className="mr-2" />
-      <img src={photoURL} alt="logo" className="w-10 rounded-full mr-4" />
+      <img src={photoURL} alt="logo" className="w-8 rounded-full mr-4" />
     </header>
   );
 }

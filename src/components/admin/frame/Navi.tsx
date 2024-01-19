@@ -19,6 +19,10 @@ function Navi() {
       to: "/admin/quiz",
       title: "문제 관리",
     },
+    {
+      to: "/admin/user",
+      title: "사용자 관리",
+    },
   ];
   return (
     <nav>
