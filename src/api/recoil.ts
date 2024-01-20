@@ -7,7 +7,7 @@ export const quizListState = atom({
 
 export const quizListSelector = selector({
   key: "quizListQuery",
-  get: async () => {
+  get: async ({ get }) => {
     try {
       const snapshot = await quizListApi();
       if (snapshot.exists()) {

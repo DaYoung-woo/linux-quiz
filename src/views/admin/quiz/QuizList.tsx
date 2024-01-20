@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import { ReactComponent as QuizAdd } from "../../../assets/img/quiz_add.svg";
 import { quizListSelector } from "../../../api/recoil";
-import { useRecoilValue } from "recoil";
-import { Suspense } from "react";
+import { useRecoilValueLoadable } from "recoil";
 function Quiz() {
-  const quizList = useRecoilValue(quizListSelector);
+  const quizList = useRecoilValueLoadable(quizListSelector);
 
   return (
     <div>
@@ -22,43 +21,27 @@ function Quiz() {
           </button>
         </Link>
       </div>
-      {
-        <ul className="quiz-list">
-          {quizList ? (
-            quizList.map(({ title, year, order, quizNum, subject }) => (
-              <li className="bg  hover:bg-slate-50" key={title}>
-                <input type="checkbox" />
-                <div className="pl-3">
-                  <p className="font-medium">
-                    {title.length > 50 ? `${title.substring(0, 50)}...` : title}
-                  </p>
-                  <span className="text-gray-500">
-                    {year}년도 {order}회차 {quizNum}번 {subject}과목
-                  </span>
-                </div>
-              </li>
-            ))
-          ) : (
-            <div>Loading...</div>
-          )}
-        </ul>
-      }
-      {/* <ul className="quiz-list">
-        {
-          (quizList.map(({ title, year, order, quizNum, subject }) => (
-            <li className="bg  hover:bg-slate-50" key={title}>
-              <input type="checkbox" />
-              <div className="pl-3">
-                <p className="font-medium">
-                  {title.length > 50 ? `${title.substring(0, 50)}...` : title}
-                </p>
-                <span className="text-gray-500">
-                  {year}년도 {order}회차 {quizNum}번 {subject}과목
-                </span>
-              </div>
-            </li>
-          ))) :  (<div>Loading...</div>)}
-      </ul> */}
+      <ul className="quiz-list">
+        {quizList.state === "loading"
+          ? "Loading..."
+          : quizList.contents.map(
+              ({ title, year, order, quizNum, subject }) => (
+                <li className="bg  hover:bg-slate-50" key={title}>
+                  <input type="checkbox" />
+                  <div className="pl-3">
+                    <p className="font-medium">
+                      {title.length > 50
+                        ? `${title.substring(0, 50)}...`
+                        : title}
+                    </p>
+                    <span className="text-gray-500">
+                      {year}년도 {order}회차 {quizNum}번 {subject}과목
+                    </span>
+                  </div>
+                </li>
+              )
+            )}
+      </ul>
     </div>
   );
 }
