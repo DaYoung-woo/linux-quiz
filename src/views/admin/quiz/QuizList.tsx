@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { ReactComponent as QuizAdd } from "../../../assets/img/quiz_add.svg";
-import { quizListSelector } from "../../../api/recoil";
+import { quizListAtom } from "../../../api/recoil";
 import { useRecoilValueLoadable } from "recoil";
+
 function Quiz() {
-  const quizList = useRecoilValueLoadable(quizListSelector);
+  const quizListLoadable = useRecoilValueLoadable(quizListAtom);
 
   return (
     <div>
@@ -22,9 +23,9 @@ function Quiz() {
         </Link>
       </div>
       <ul className="quiz-list">
-        {quizList.state === "loading"
+        {quizListLoadable.state === "loading"
           ? "Loading..."
-          : quizList.contents.map(
+          : quizListLoadable.contents.map(
               ({ title, year, order, quizNum, subject }) => (
                 <li className="bg  hover:bg-slate-50" key={title}>
                   <input type="checkbox" />

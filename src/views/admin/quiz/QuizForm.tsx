@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { addQuizApi } from "../../../api/api";
 import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
 import AlertPopup from "../../../components/common/AlertPopup";
+import { useSetRecoilState } from "recoil";
+import { quizListAtom } from "../../../api/recoil";
 
 function QuizForm() {
   const defaultQuiz = {
@@ -23,6 +25,7 @@ function QuizForm() {
   const [addAlert, setAddAlert] = useState(false);
   const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
   const [btnDisabled, setDisabled] = useState(true);
+  const setQuizList = useSetRecoilState(quizListAtom);
 
   const navigation = useNavigate();
 
@@ -49,9 +52,10 @@ function QuizForm() {
       ...formData,
     };
     try {
-      const res = await addQuizApi(param);
-      console.log(res);
+      await addQuizApi(param);
       setAddAlert(true);
+
+      setQuizList((prev) => [...prev, param]);
       setTimeout(() => closeAddAlert(), 2000);
     } catch (e) {
       alert("문제가 발생했어요😭");
@@ -70,7 +74,6 @@ function QuizForm() {
     const valid = Object.keys(newFormData)
       .filter((el) => el !== "id")
       .find((el) => !newFormData[el]);
-    console.log(valid);
     setDisabled(!!valid);
   };
 
