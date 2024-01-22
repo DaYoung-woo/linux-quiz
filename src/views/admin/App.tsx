@@ -1,39 +1,28 @@
-import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { auth } from "../../utils/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { Outlet, Navigate } from "react-router-dom";
 import Header from "../../components/admin/frame/Header";
 import Navi from "../../components/admin/frame/Navi";
+import { userEmailAtom } from "../../api/recoil";
+import { useRecoilState } from "recoil";
+import { auth } from "../../utils/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 function App() {
-  const [user, setUser] = useState({ email: "iamwooda0@gmail.com" });
-  const naviagte = useNavigate();
-  const location = useLocation();
+  const [userEmail, setUserEmail] = useRecoilState(userEmailAtom);
 
   useEffect(() => {
     onAuthStateChanged(auth, (userInfo) => {
-      if (
-        userInfo?.email === "iamwooda0@gmail.com" &&
-        location.pathname.includes("/admin")
-      ) {
-        if (location.pathname === "/admin") {
-          setUser(userInfo);
-          naviagte("/admin/dashboard");
-        }
-      } else {
-        if (location.pathname !== "/admin") {
-          alert("권한이 없습니다.");
-          naviagte("/admin");
-        }
+      if (userInfo?.email === "iamwooda0@gmail.com") {
+        setUserEmail(userInfo.email);
       }
     });
-    // eslint-disable-next-line
   }, []);
 
   return (
     <>
-      {user?.email === "iamwooda0@gmail.com" && (
+      {userEmail !== "iamwooda0@gmail.com" ? (
+        <Navigate to="/admin/login" replace />
+      ) : (
         <div className={`admin-app mx-auto `}>
           <div className="admin-app-body">
             <Navi />
@@ -48,8 +37,6 @@ function App() {
           </div>
         </div>
       )}
-
-      {user?.email !== "iamwooda0@gmail.com" && <Outlet />}
     </>
   );
 }

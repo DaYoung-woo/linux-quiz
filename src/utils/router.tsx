@@ -37,7 +37,7 @@ const AppRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <AdminLogin />,
+        element: <AdminDashboard />,
       },
       {
         path: "quiz",
@@ -56,6 +56,11 @@ const AppRouter = createBrowserRouter([
         element: <AdminUserList />,
       },
     ],
+  },
+  {
+    path: "/admin/login",
+    element: <AdminLogin />,
+    errorElement: <Error />,
   },
 ]);
 
