@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { addQuizApi } from "../../../api/api";
 import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
 import AlertPopup from "../../../components/common/AlertPopup";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
 import { quizListAtom } from "../../../api/recoil";
 
 function QuizForm() {
@@ -22,13 +22,21 @@ function QuizForm() {
   };
   const years = [2024, 2023, 2022, 2021, 2020];
   const quizNums = Array.from({ length: 100 }, (_, index) => index + 1);
+  const [searchParams] = useSearchParams();
   const [addAlert, setAddAlert] = useState(false);
   const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
   const [btnDisabled, setDisabled] = useState(true);
+  const quizList = useRecoilValue(quizListAtom);
   const setQuizList = useSetRecoilState(quizListAtom);
-
   const navigation = useNavigate();
 
+  useEffect(() => {
+    const index = searchParams.get("index");
+    if (index) {
+      setFormData({ ...quizList.find((el) => el.index === index) });
+      setDisabled(false);
+    }
+  }, []);
   // 모달 닫고 메인 화면 이동
   const closeAddAlert = () => {
     setAddAlert(false);
@@ -87,7 +95,7 @@ function QuizForm() {
           value={formData.year}
           onChange={handleChange}
           required
-          className="mr-4 border rounded-full px-2 py-1"
+          className="mr-4 border rounded-full px-2 py-1 w-24"
         >
           <option value="" disabled>
             년도
@@ -103,7 +111,7 @@ function QuizForm() {
           value={formData.order}
           onChange={handleChange}
           required
-          className="mr-4 border rounded-full px-2 py-1"
+          className="mr-4 border rounded-full px-2 py-1 w-24"
         >
           <option value="" disabled>
             회차
@@ -117,7 +125,7 @@ function QuizForm() {
           value={formData.quizNum}
           onChange={handleChange}
           required
-          className="mr-4 border rounded-full px-2 py-1"
+          className="mr-4 border rounded-full px-2 py-1 w-24"
         >
           <option value="" disabled>
             문제 번호

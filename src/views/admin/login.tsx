@@ -1,24 +1,19 @@
-import { useNavigate, Navigate } from "react-router-dom";
-import {
-  signInWithRedirect,
-  getRedirectResult,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { Navigate } from "react-router-dom";
+import { signInWithRedirect, onAuthStateChanged } from "firebase/auth";
 import { auth, provider } from "../../utils/firebase";
 
 import googleLogin from "../../assets/img/googloLogin.svg";
 import { userEmailAtom } from "../../api/recoil";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useEffect } from "react";
 
 function AdminLogin() {
-  const navigate = useNavigate();
   const login = () => signInWithRedirect(auth, provider);
   const [userEmail, setUserEmail] = useRecoilState(userEmailAtom);
-
+  
   useEffect(() => {
     onAuthStateChanged(auth, (userInfo) => {
-      if (userInfo?.email === "iamwooda0@gmail.com") {
+      if (userInfo?.email === process.env.REACT_APP_FIREBASE_ADMIN_ACCOUNT) {
         setUserEmail(userInfo.email);
       }
     });
@@ -26,7 +21,7 @@ function AdminLogin() {
 
   return (
     <>
-      {userEmail === "iamwooda0@gmail.com" ? (
+      {userEmail === process.env.REACT_APP_FIREBASE_ADMIN_ACCOUNT ? (
         <Navigate to="/admin/dashboard" replace />
       ) : (
         <div className="h-full flex w-72 m-auto">

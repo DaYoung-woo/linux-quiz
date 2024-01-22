@@ -27,20 +27,22 @@ function Quiz() {
         {quizListLoadable.state === "loading"
           ? "Loading..."
           : quizListLoadable.contents.map(
-              ({ title, year, order, quizNum, subject, answer }) => (
-                <li className="bg  hover:bg-slate-50" key={title}>
-                  <div className="pl-3">
-                    <span className=" text-gray-500">
-                      {year}년도 {order}회차 {quizNum}번 {subject}과목
-                    </span>
-                    <p className="font-medium">
-                      {title.length > 50
-                        ? `${title.substring(0, 50)}...`
-                        : title}
-                    </p>
-                  </div>
-                  <Trashbin className="mr-2" height="16px" fill="#6B7280" />
-                </li>
+              ({ title, year, order, quizNum, subject, index }) => (
+                <Link to={`/admin/quiz_form?index=${index}`} key={title}>
+                  <li className="bg  hover:bg-slate-50">
+                    <div className="pl-3">
+                      <span className=" text-gray-500">
+                        {year}년도 {order}회차 {quizNum}번 {subject}과목
+                      </span>
+                      <p className="font-medium">
+                        {title.length > 50
+                          ? `${title.substring(0, 50)}...`
+                          : title}
+                      </p>
+                    </div>
+                    <Trashbin className="mr-2" height="16px" fill="#6B7280" />
+                  </li>
+                </Link>
               )
             )}
       </ul>

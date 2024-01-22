@@ -3,7 +3,7 @@ import { quizListApi } from "./api";
 
 export const userEmailAtom = atom({
   key: "userEmailState",
-  default: "",
+  default: null,
 });
 
 export const quizListAtom = atom({
@@ -14,7 +14,20 @@ export const quizListAtom = atom({
       try {
         const snapshot = await quizListApi();
         if (snapshot.exists()) {
-          return Object.keys(snapshot.val()).map((el) => snapshot.val()[el]);
+          const arr = [];
+          Object.keys(snapshot.val()).forEach((year) => {
+            Object.keys(snapshot.val()[year]).forEach((order) => {
+              Object.keys(snapshot.val()[year][order]).forEach((quizNum) => {
+                if (!!snapshot.val()[year][order][quizNum]) {
+                  arr.push({
+                    ...snapshot.val()[year][order][quizNum],
+                    index: `${year}-${order}-${quizNum}`,
+                  });
+                }
+              });
+            });
+          });
+          return arr;
         } else return [];
       } catch (e) {
         return e;

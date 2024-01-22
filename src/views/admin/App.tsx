@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import Header from "../../components/admin/frame/Header";
 import Navi from "../../components/admin/frame/Navi";
@@ -6,21 +6,25 @@ import { userEmailAtom } from "../../api/recoil";
 import { useRecoilState } from "recoil";
 import { auth } from "../../utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
 
 function App() {
   const [userEmail, setUserEmail] = useRecoilState(userEmailAtom);
 
   useEffect(() => {
     onAuthStateChanged(auth, (userInfo) => {
-      if (userInfo?.email === "iamwooda0@gmail.com") {
+      if (userInfo?.email === process.env.REACT_APP_FIREBASE_ADMIN_ACCOUNT) {
         setUserEmail(userInfo.email);
+      } else {
+        setUserEmail("");
       }
     });
   }, []);
 
   return (
     <>
-      {userEmail !== "iamwooda0@gmail.com" ? (
+      {userEmail !== process.env.REACT_APP_FIREBASE_ADMIN_ACCOUNT &&
+      userEmail !== null ? (
         <Navigate to="/admin/login" replace />
       ) : (
         <div className={`admin-app mx-auto `}>
