@@ -12,7 +12,7 @@ function AlertPopup({ isOpen, onRequestClose, title, desc }) {
       style={alertPopupStyles}
       contentLabel="Example Modal"
     >
-      <div className="flex items-center">
+      <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Check className="mr-2" />
           <div>

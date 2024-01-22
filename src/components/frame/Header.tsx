@@ -1,14 +1,12 @@
 import { useContext } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
-import logo from "../../assets/img/logo.svg";
-
+import { ReactComponent as Logo } from "../../assets/img/logo.svg";
 function Header({ clickIcon }) {
   const theme = useContext(ThemeContext);
   return (
-    <header className="flex align-center">
+    <header className="flex items-center px-2">
       <ThemeContext.Provider value={theme}>
-        <img src={logo} alt="logo" width="30px" />
-        <div onClick={clickIcon}>icon</div>
+        <Logo width="30px" height="30px"></Logo>
       </ThemeContext.Provider>
     </header>
   );

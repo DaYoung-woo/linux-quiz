@@ -4,20 +4,20 @@ import { auth, provider } from "../../utils/firebase";
 
 import googleLogin from "../../assets/img/googloLogin.svg";
 import { userEmailAtom } from "../../api/recoil";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 
 function AdminLogin() {
   const login = () => signInWithRedirect(auth, provider);
   const [userEmail, setUserEmail] = useRecoilState(userEmailAtom);
-  
+
   useEffect(() => {
     onAuthStateChanged(auth, (userInfo) => {
       if (userInfo?.email === process.env.REACT_APP_FIREBASE_ADMIN_ACCOUNT) {
         setUserEmail(userInfo.email);
       }
     });
-  }, []);
+  }, [setUserEmail]);
 
   return (
     <>

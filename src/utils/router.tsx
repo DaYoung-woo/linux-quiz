@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Error from "../views/Error";
-import Quiz from "../views/Quiz";
+import CategoryList from "../views/quiz/CategoryList";
 import Bookmark from "../views/Bookmark";
 import App from "../App";
 import AdminLogin from "../views/admin/Login";
@@ -18,15 +18,11 @@ const AppRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Quiz />,
+        element: <CategoryList />,
       },
       {
         path: "/bookmark",
         element: <Bookmark />,
-      },
-      {
-        path: "/quiz",
-        element: <Quiz />,
       },
     ],
   },

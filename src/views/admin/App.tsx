@@ -6,7 +6,6 @@ import { userEmailAtom } from "../../api/recoil";
 import { useRecoilState } from "recoil";
 import { auth } from "../../utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
 
 function App() {
   const [userEmail, setUserEmail] = useRecoilState(userEmailAtom);
@@ -19,7 +18,7 @@ function App() {
         setUserEmail("");
       }
     });
-  }, []);
+  }, [setUserEmail]);
 
   return (
     <>

@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { addQuizApi } from "../../../api/api";
 import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
 import AlertPopup from "../../../components/common/AlertPopup";
-import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { quizListAtom } from "../../../api/recoil";
 
 function QuizForm() {
