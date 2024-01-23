@@ -12,7 +12,7 @@ export const quizListAtom = atom({
     key: "quizListSelector",
     get: async () => {
       try {
-        const snapshot = await quizListApi();
+        const snapshot = await quizListApi("", "", "");
         if (snapshot.exists()) {
           return snapshot.val();
         } else return [];
@@ -24,13 +24,10 @@ export const quizListAtom = atom({
   }),
 });
 
-export const userQuizListAtom = atom({ key: "categoryList", default: [] });
-
 export const userQuizListSelector = selector({
   key: "userQuizListSelector",
   get: function ({ get }) {
     const quizList = get(quizListAtom);
-
     const arr = Object.keys(quizList).map((year) => ({
       year,
       child: quizList[year]
@@ -65,4 +62,9 @@ export const adminQuizListAtom = selector({
     return arr;
   },
   set: () => {},
+});
+
+export const userQuizListAtom = atom({
+  key: "userQuizListAtom",
+  default: [],
 });

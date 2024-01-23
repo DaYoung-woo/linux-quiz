@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useRecoilValueLoadable } from "recoil";
-import { adminQuizListAtom } from "../../../api/recoil";
-import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
-import { ReactComponent as Trashbin } from "../../../assets/img/trashbin.svg";
+import { adminQuizListAtom } from "../../api/recoil";
+import { ReactComponent as Plus } from "../../assets/img/plus.svg";
+import { ReactComponent as Trashbin } from "../../assets/img/trashbin.svg";
 
 function Quiz() {
   const quizListLoadable = useRecoilValueLoadable(adminQuizListAtom);

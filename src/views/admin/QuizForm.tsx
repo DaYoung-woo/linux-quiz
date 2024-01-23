@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { addQuizApi } from "../../../api/api";
-import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
-import AlertPopup from "../../../components/common/AlertPopup";
+import { addQuizApi } from "../../api/api";
+import { ReactComponent as Plus } from "../../assets/img/plus.svg";
+import AlertPopup from "../../components/common/AlertPopup";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { quizListAtom } from "../../../api/recoil";
+import { adminQuizListAtom, quizListAtom } from "../../api/recoil";
 
 function QuizForm() {
   const defaultQuiz = {
@@ -26,7 +26,7 @@ function QuizForm() {
   const [addAlert, setAddAlert] = useState(false);
   const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
   const [btnDisabled, setDisabled] = useState(true);
-  const quizList = useRecoilValue(quizListAtom);
+  const quizList = useRecoilValue(adminQuizListAtom);
   const setQuizList = useSetRecoilState(quizListAtom);
   const navigation = useNavigate();
 
@@ -37,6 +37,7 @@ function QuizForm() {
       setDisabled(false);
     }
   }, []);
+
   // 모달 닫고 메인 화면 이동
   const closeAddAlert = () => {
     setAddAlert(false);

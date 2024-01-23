@@ -6,8 +6,15 @@ export const addQuizApi = (param) => {
   return set(ref(db, `quiz_list/${year}/${order}/${quizNum}`), param);
 };
 
-export const quizListApi = () => {
-  return get(child(ref(db), `quiz_list`));
+export const quizListApi = (year, order, quizNum) => {
+  return get(
+    child(
+      ref(db),
+      `quiz_list${!!year ? `/${year}` : ""}${!!order ? `/${order}` : ""}${
+        !!quizNum ? `/${quizNum}` : ""
+      }`
+    )
+  );
 };
 
 export const categoryListApi = () => {
