@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { useRecoilValueLoadable } from "recoil";
-import { quizListAtom } from "../../../api/recoil";
+import { adminQuizListAtom } from "../../../api/recoil";
 import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
 import { ReactComponent as Trashbin } from "../../../assets/img/trashbin.svg";
 
 function Quiz() {
-  const quizListLoadable = useRecoilValueLoadable(quizListAtom);
+  const quizListLoadable = useRecoilValueLoadable(adminQuizListAtom);
 
+  if (quizListLoadable.state !== "loading")
+    console.log(quizListLoadable.contents);
   return (
     <div>
       <h1>문제 관리</h1>
