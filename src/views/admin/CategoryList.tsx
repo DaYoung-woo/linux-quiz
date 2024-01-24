@@ -106,7 +106,7 @@ function CategoryList() {
                   <Trashbin className="mr-2" height="16px" fill="#6B7280" />
                 </li>
               ))}
-            {!categoryList && (
+            {!categoryList.length && (
               <div className="text-center mt-36">등록된 데이터가 없습니다</div>
             )}
           </ul>

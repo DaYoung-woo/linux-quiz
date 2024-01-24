@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 
 function MainList() {
   const quizListLoadable = useRecoilValueLoadable(userQuizListSelector);
-  
+
   return (
     <div className="px-4 mt-2">
       {quizListLoadable.state === "loading"
         ? "Loading..."
-        : quizListLoadable.contents.map(({ year, child }) => (
+        : quizListLoadable.contents?.map(({ year, child }) => (
             <div className="mb-2" key={year}>
               <h4 className="py-2 font-semibold">{year}년</h4>
               {child.map(({ order }) => (

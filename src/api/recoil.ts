@@ -75,7 +75,7 @@ export const userEmailAtom = atom({
 
 export const userPhotoAtom = atom({
   key: "userPhotoState",
-  default: '',
+  default: "",
 });
 
 //  카테고리 리스트
