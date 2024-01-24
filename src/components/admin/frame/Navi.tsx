@@ -4,7 +4,7 @@ import logo from "../../../assets/img/logo.svg";
 
 function Navi() {
   const location = useLocation();
-  const [active, setActive] = useState("/dashboard");
+  const [active, setActive] = useState("/");
 
   useEffect(() => {
     setActive(location.pathname);
@@ -12,16 +12,8 @@ function Navi() {
 
   const menuList = [
     {
-      to: "/admin/dashboard",
-      title: "대시보드",
-    },
-    {
-      to: "/admin/quiz",
+      to: "/admin",
       title: "문제 관리",
-    },
-    {
-      to: "/admin/user",
-      title: "사용자 관리",
     },
   ];
   return (

@@ -22,7 +22,7 @@ function AdminLogin() {
   return (
     <>
       {userEmail === process.env.REACT_APP_FIREBASE_ADMIN_ACCOUNT ? (
-        <Navigate to="/admin/dashboard" replace />
+        <Navigate to="/admin/quiz" replace />
       ) : (
         <div className="h-full flex w-72 m-auto">
           <img src={googleLogin} alt="googleLogin" onClick={login} />

@@ -30,7 +30,7 @@ function Quiz() {
           ? "Loading..."
           : quizListLoadable.contents.map(
               ({ title, year, order, quizNum, subject, index }) => (
-                <Link to={`/admin/quiz_form?index=${index}`} key={title}>
+                <Link to={`/admin/quiz_form?index=${index}`} key={index}>
                   <li className="bg  hover:bg-slate-50">
                     <div className="pl-3">
                       <span className=" text-gray-500">

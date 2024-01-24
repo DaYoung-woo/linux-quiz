@@ -45,7 +45,7 @@ function QuizList() {
           key={el.quizNum}
           to={`/quiz_form?year=${year}&order=${order}&quizNum=${el.quizNum}`}
         >
-          <div className="border border-slate-200 px-3 py-2 my-1 flex justify-between items-center font-medium rounded-md">
+          <div className="border border-slate-200 px-3 py-2 my-1 flex justify-between items-center  rounded-md">
             {el.quizNum}번
             <ArrowRight />
           </div>

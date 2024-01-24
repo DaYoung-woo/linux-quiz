@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { addQuizApi } from "../../api/api";
 import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import AlertPopup from "../../components/common/AlertPopup";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { adminQuizListAtom, quizListAtom } from "../../api/recoil";
 
 function QuizForm() {
@@ -27,7 +27,7 @@ function QuizForm() {
   const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
   const [btnDisabled, setDisabled] = useState(true);
   const quizList = useRecoilValue(adminQuizListAtom);
-  const setQuizList = useSetRecoilState(quizListAtom);
+  const [orginQuizList, setQuizList] = useRecoilState(quizListAtom);
   const navigation = useNavigate();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function QuizForm() {
   // 모달 닫고 메인 화면 이동
   const closeAddAlert = () => {
     setAddAlert(false);
-    navigation("/admin/quiz");
+    navigation("/admin");
   };
 
   const getFile = (e) => {
@@ -63,10 +63,13 @@ function QuizForm() {
     try {
       await addQuizApi(param);
       setAddAlert(true);
-
-      setQuizList((prev) => [...prev, param]);
+      const obj = { ...orginQuizList };
+      obj[formData.year][formData.order][formData.quizNum] = { ...param };
+      console.log(obj );
+      setQuizList(obj);
       setTimeout(() => closeAddAlert(), 2000);
     } catch (e) {
+      console.log(e);
       alert("문제가 발생했어요😭");
     }
   };
