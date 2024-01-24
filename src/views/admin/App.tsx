@@ -2,19 +2,21 @@ import { useEffect } from "react";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 import Header from "../../components/frame/admin/Header";
 import Navi from "../../components/frame/admin/Navi";
-import { userEmailAtom } from "../../api/recoil";
-import { useRecoilState } from "recoil";
+import { userEmailAtom, userPhotoAtom } from "../../api/recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { auth } from "../../utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 function App() {
   const [userEmail, setUserEmail] = useRecoilState(userEmailAtom);
+  const setUserPhoto = useSetRecoilState(userPhotoAtom)
   const adminId = process.env.REACT_APP_FIREBASE_ADMIN_ACCOUNT;
   const location = useLocation();
   useEffect(() => {
     onAuthStateChanged(auth, (userInfo) => {
       if (userInfo?.email === adminId) {
-        setUserEmail(userInfo.email);
+        setUserEmail(userInfo?.email);
+        setUserPhoto(userInfo.photoURL)
       } else {
         setUserEmail("");
       }

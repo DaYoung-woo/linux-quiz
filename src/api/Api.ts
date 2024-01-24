@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { fdb, rdb } from "../utils/firebase";
 import { ref, set, get, child } from "firebase/database";
 
@@ -30,12 +30,19 @@ export const categorySaveApi = (param) => {
 
 // 문제 저장
 export const quizSaveApi = (param) => {
-  const { category, quizNum } = param;
-  const docRef = collection(fdb, "quiz_list", category, "quiz");
-  return setDoc(doc(docRef, quizNum), param);
+  const {category, quizNum} = param
+  const payload = {}
+  payload[quizNum] = param
+  return setDoc(doc(fdb, "quiz_list", `${category}`), payload);
 };
 
 // 문제 리스트
-export const quizListApiTest = (category) => {
-  return getDocs(collection(fdb, "quiz_list", category, "quiz"));
+export const quizListApiTest = async(category) => {
+  const snapshot = await getDocs(collection(fdb, "quiz_list", category));
+  if (!!snapshot) {
+    const list = [];
+    snapshot.forEach(doc => list.push(doc.data()))
+    console.log(list)
+    return list;
+  } else return [];
 };

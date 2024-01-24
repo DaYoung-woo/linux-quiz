@@ -14,7 +14,7 @@ function AdminLogin() {
   useEffect(() => {
     onAuthStateChanged(auth, (userInfo) => {
       if (userInfo?.email === process.env.REACT_APP_FIREBASE_ADMIN_ACCOUNT) {
-        setUserEmail(userInfo.email);
+        setUserEmail(userInfo?.email);
       }
     });
   }, [setUserEmail]);
