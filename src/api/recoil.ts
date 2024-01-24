@@ -1,5 +1,8 @@
 import { atom, selector } from "recoil";
 import { quizListApi } from "./api";
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist();
 
 export const userEmailAtom = atom({
   key: "userEmailState",
@@ -73,4 +76,5 @@ export const userQuizListAtom = atom({
 export const categoryListAtom = atom({
   key: "categoryListAtom",
   default: [],
+  effects_UNSTABLE: [persistAtom],
 });
