@@ -65,7 +65,7 @@ function QuizForm() {
       setAddAlert(true);
       const obj = { ...orginQuizList };
       obj[formData.year][formData.order][formData.quizNum] = { ...param };
-      console.log(obj );
+      console.log(obj);
       setQuizList(obj);
       setTimeout(() => closeAddAlert(), 2000);
     } catch (e) {

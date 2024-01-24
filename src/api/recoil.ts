@@ -68,3 +68,9 @@ export const userQuizListAtom = atom({
   key: "userQuizListAtom",
   default: [],
 });
+
+//  카테고리 리스트
+export const categoryListAtom = atom({
+  key: "categoryListAtom",
+  default: [],
+});

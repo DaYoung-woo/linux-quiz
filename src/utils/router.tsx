@@ -8,6 +8,7 @@ import AdminLogin from "../views/admin/Login";
 import AdminApp from "../views/admin/App";
 import AdminQuizList from "../views/admin/QuizList";
 import AdminQuizForm from "../views/admin/QuizForm";
+import AdminCategoryList from "../views/admin/CategoryList";
 
 const AppRouter = createBrowserRouter([
   {
@@ -39,8 +40,16 @@ const AppRouter = createBrowserRouter([
         element: <AdminQuizList />,
       },
       {
+        path: "quiz_list",
+        element: <AdminQuizList />,
+      },
+      {
         path: "quiz_form",
         element: <AdminQuizForm />,
+      },
+      {
+        path: "category_list",
+        element: <AdminCategoryList />,
       },
     ],
   },

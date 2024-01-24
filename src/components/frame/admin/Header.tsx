@@ -6,7 +6,7 @@ function Header() {
   const naviagte = useNavigate();
   const signout = () => {
     logOut().then(() => {
-      naviagte("/admin");
+      naviagte("/admin/quiz_list");
     });
   };
   return (

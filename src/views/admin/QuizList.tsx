@@ -3,25 +3,31 @@ import { useRecoilValueLoadable } from "recoil";
 import { adminQuizListAtom } from "../../api/recoil";
 import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import { ReactComponent as Trashbin } from "../../assets/img/trashbin.svg";
+import { useQuery } from "@tanstack/react-query";
+import { categoryListApi } from "../../api/api";
 
 function Quiz() {
   const quizListLoadable = useRecoilValueLoadable(adminQuizListAtom);
 
-  if (quizListLoadable.state !== "loading")
-    console.log(quizListLoadable.contents);
+  // 카테고리 리스트 api 요청
+  useQuery({
+    queryKey: ["fetchCategoryList"],
+    queryFn: () => categoryListApi(),
+  });
+
   return (
     <div>
       <h1>문제 관리</h1>
       <div className="flex justify-between mt-5 mb-2">
         <input
           type="text"
-          className="bg-slate-50 rounded-full border px-5 active:border-stone-100"
+          className="bg-slate-50 rounded-full border px-5 active:border-stone-100 py-2"
           placeholder="검색"
         />
         <Link to="/admin/quiz_form">
           <button className="flex items-center pl-7 pr-8 py-2 bg-indigo-500 rounded-md text-slate-50">
             <Plus fill="white" />
-            문제 추가
+            <span className="lh-25">문제 추가</span>
           </button>
         </Link>
       </div>

@@ -9,7 +9,8 @@ import "./index.scss";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 10,
+      cacheTime: 60000, // 1분 동안 캐시로 저장
+      staleTime: 10000, // 10초 이내에는 캐시된 결과를 사용
     },
   },
 });
