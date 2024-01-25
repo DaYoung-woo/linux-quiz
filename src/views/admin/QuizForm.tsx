@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
-import { addQuizApi } from "../../../api/api";
-import { ReactComponent as Plus } from "../../../assets/img/plus.svg";
-import AlertPopup from "../../../components/common/AlertPopup";
-import { useSetRecoilState } from "recoil";
-import { quizListAtom } from "../../../api/recoil";
+import { quizSaveApi, categoryListApi } from "../../api/api";
+import { ReactComponent as Plus } from "../../assets/img/plus.svg";
+import AlertPopup from "../../components/common/AlertPopup";
+import { useQuery } from "@tanstack/react-query";
 
 function QuizForm() {
+  // 기본 객체
   const defaultQuiz = {
-    year: "",
-    order: "",
+    category: "",
     quizNum: "",
     title: "",
     distractor1: "",
@@ -20,23 +18,42 @@ function QuizForm() {
     desc: "",
     answer: "",
   };
-  const years = [2024, 2023, 2022, 2021, 2020];
+  // 문제 번호 생성
   const quizNums = Array.from({ length: 100 }, (_, index) => index + 1);
   const [addAlert, setAddAlert] = useState(false);
   const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
   const [btnDisabled, setDisabled] = useState(true);
-  const setQuizList = useSetRecoilState(quizListAtom);
-
+  const [attachment, setAttachment] = useState(null);
   const navigation = useNavigate();
+
+  // 카테고리 리스트 api 요청
+  const { status, data } = useQuery({
+    queryKey: ["fetchCategoryList"],
+    queryFn: () => categoryListApi(),
+  });
 
   // 모달 닫고 메인 화면 이동
   const closeAddAlert = () => {
     setAddAlert(false);
-    navigation("/admin/quiz");
+    navigation("/admin/quiz_list");
   };
 
   const getFile = (e) => {
-    console.log(e);
+    // 업로드 된 file
+    const files = e.target.files;
+    const theFile = files[0];
+
+    // FileReader 생성
+    const reader = new FileReader();
+
+    // file 업로드가 완료되면 실행
+    reader.onloadend = (finishedEvent) => {
+      // 업로드한 이미지 URL 저장
+      const result = (finishedEvent.currentTarget as FileReader)?.result;
+      setAttachment(result);
+    };
+    // 파일 정보를 읽기
+    reader.readAsDataURL(theFile);
   };
 
   // 저장 버튼 클릭
@@ -48,14 +65,14 @@ function QuizForm() {
   // 저장 api 요청
   const addQuiz = async () => {
     const param = {
-      id: !!formData.id || uuidv4(),
+      id: `${formData.category}${formData.quizNum}`,
       ...formData,
+      year: formData.category.split("-")[0],
+      order: formData.category.split("-")[1],
     };
     try {
-      await addQuizApi(param);
+      await quizSaveApi(param);
       setAddAlert(true);
-
-      setQuizList((prev) => [...prev, param]);
       setTimeout(() => closeAddAlert(), 2000);
     } catch (e) {
       alert("문제가 발생했어요😭");
@@ -65,6 +82,7 @@ function QuizForm() {
   // 폼 입력 값 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (value === "loading") return;
     const newFormData = {
       ...formData,
       [name]: value,
@@ -77,47 +95,43 @@ function QuizForm() {
     setDisabled(!!valid);
   };
 
+  // 이미지 삭제
+  const onClearAttachment = () => {
+    setAttachment(null);
+  };
+
   return (
     <div className="quiz-form">
       <h1>문제 추가</h1>
 
       <form className="mt-5">
         <select
-          name="year"
-          value={formData.year}
+          name="category"
+          value={formData.category}
           onChange={handleChange}
           required
-          className="mr-4 border rounded-full px-2 py-1"
+          className="mr-4 border rounded-full px-2 py-1 w-40"
         >
           <option value="" disabled>
-            년도
+            카테고리
           </option>
-          {years.map((el) => (
-            <option value={el} key={el}>
-              {el}
-            </option>
-          ))}
+          {status === "pending" && (
+            <option value="loading">...로딩중입니다.</option>
+          )}
+          {status === "success" &&
+            data.map(({ year, order, id }) => (
+              <option value={id} key={id}>
+                {year}년도 {order}회차
+              </option>
+            ))}
         </select>
-        <select
-          name="order"
-          value={formData.order}
-          onChange={handleChange}
-          required
-          className="mr-4 border rounded-full px-2 py-1"
-        >
-          <option value="" disabled>
-            회차
-          </option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
+
         <select
           name="quizNum"
           value={formData.quizNum}
           onChange={handleChange}
           required
-          className="mr-4 border rounded-full px-2 py-1"
+          className="mr-4 border rounded-full px-2 py-1 w-28"
         >
           <option value="" disabled>
             문제 번호
@@ -140,13 +154,27 @@ function QuizForm() {
             value={formData.title}
             onChange={handleChange}
           />
+
+          <label htmlFor="upload-image" className="mt-3">
+            <div className="border border-slate-300 w-40 mt-3 h-40">
+              이미지 업로드
+            </div>
+          </label>
           <input
             type="file"
             hidden
+            name="upload-image"
             id="upload-image"
             accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
             onChange={(e) => getFile(e)}
           />
+
+          {attachment && (
+            <div>
+              <img src={attachment} width="50px" height="50px" alt="" />
+              <button onClick={onClearAttachment}>Clear</button>
+            </div>
+          )}
 
           <h4 className="pt-6">보기</h4>
           <input

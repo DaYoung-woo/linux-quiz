@@ -1,24 +1,51 @@
 import { atom, selector } from "recoil";
 import { quizListApi } from "./api";
+import { recoilPersist } from "recoil-persist";
 
-export const userEmailAtom = atom({
-  key: "userEmailState",
+const { persistAtom } = recoilPersist();
+
+export const userQuizListSelector = selector({
+  key: "userQuizListSelector",
+  get: function ({ get }) {
+    const quizList = get(quizListAtom);
+    const arr = Object.keys(quizList).map((year) => ({
+      year,
+      child: quizList[year]
+        .filter((el) => !!el)
+        .map((child) => child.filter((test) => !!test)[0]),
+    }));
+    console.log(arr);
+
+    if (!!quizList) return arr;
+    else return [];
+  },
+  set: () => {},
+});
+
+export const userQuizListAtom = atom({
+  key: "userQuizListAtom",
+  default: [],
+});
+
+export const userPhotoAtom = atom({
+  key: "userPhotoState",
   default: "",
 });
 
+// 사용자 이메일
+export const userEmailAtom = atom({
+  key: "userEmailState",
+  default: null,
+});
+
+//  카테고리 리스트
+export const categoryListAtom = atom({
+  key: "categoryListAtom",
+  default: [],
+});
+
+// 사용자 퀴즈 리스트
 export const quizListAtom = atom({
-  key: "quizListState",
-  default: selector({
-    key: "CurrentUserID/Default",
-    get: async () => {
-      try {
-        const snapshot = await quizListApi();
-        if (snapshot.exists()) {
-          return Object.keys(snapshot.val()).map((el) => snapshot.val()[el]);
-        } else return [];
-      } catch (e) {
-        return e;
-      }
-    },
-  }),
+  key: "quizListAtom",
+  default: [],
 });
