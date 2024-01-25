@@ -6,20 +6,7 @@ const { persistAtom } = recoilPersist();
 
 export const quizListAtom = atom({
   key: "quizListAtom",
-  default: selector({
-    key: "quizListSelector",
-    get: async () => {
-      try {
-        const snapshot = await quizListApi("", "", "");
-        if (snapshot.exists()) {
-          return snapshot.val();
-        } else return [];
-      } catch (e) {
-        return e;
-      }
-    },
-    set: () => {},
-  }),
+  default: [],
 });
 
 export const userQuizListSelector = selector({
@@ -36,28 +23,6 @@ export const userQuizListSelector = selector({
 
     if (!!quizList) return arr;
     else return [];
-  },
-  set: () => {},
-});
-
-export const adminQuizListAtom = selector({
-  key: "adminQuizList",
-  get: ({ get }) => {
-    const quizList = get(quizListAtom);
-    const arr = [];
-    Object.keys(quizList).forEach((year) => {
-      Object.keys(quizList[year]).forEach((order) => {
-        Object.keys(quizList[year][order]).forEach((quizNum) => {
-          if (!!quizList[year][order][quizNum]) {
-            arr.push({
-              ...quizList[year][order][quizNum],
-              index: `${year}-${order}-${quizNum}`,
-            });
-          }
-        });
-      });
-    });
-    return arr;
   },
   set: () => {},
 });

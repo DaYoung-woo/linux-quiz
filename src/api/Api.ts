@@ -2,32 +2,30 @@ import {
   collection,
   doc,
   getDocs,
+  orderBy,
   query,
   setDoc,
   where,
 } from "firebase/firestore";
 import { fdb, rdb } from "../utils/firebase";
-import { ref, set, get, child } from "firebase/database";
-
-export const quizListApi = (year, order, quizNum) => {
-  return get(
-    child(
-      ref(rdb),
-      `quiz_list${!!year ? `/${year}` : ""}${!!order ? `/${order}` : ""}${
-        !!quizNum ? `/${quizNum}` : ""
-      }`
-    )
-  );
-};
 
 // 카테고리 리스트
 export const categoryListApi = async () => {
-  const snapshot = await getDocs(collection(fdb, "category_list"));
-  if (!!snapshot) {
-    const list = [];
-    snapshot.forEach((doc) => list.push(doc.data()));
-    return list;
-  } else return [];
+  const docQuery = query(
+    collection(fdb, "category_list"),
+    orderBy("year", "desc")
+  );
+  try {
+    const snapshot = await getDocs(docQuery);
+    if (!!snapshot) {
+      const list = [];
+      snapshot.forEach((doc) => list.push(doc.data()));
+      console.log(list);
+      return list;
+    } else return [];
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 // 카테고리 저장
@@ -44,12 +42,11 @@ export const quizSaveApi = (param) => {
 };
 
 // 문제 리스트
-export const quizListApiTest = async (category) => {
+export const quizListApi = async (category) => {
   const snapshot = await getDocs(collection(fdb, category));
   if (!!snapshot) {
     const list = [];
     snapshot.forEach((doc) => list.push(doc.data()));
-    console.log(list);
     return list;
   } else return [];
 };

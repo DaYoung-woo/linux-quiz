@@ -12,15 +12,22 @@ function QuizForm() {
 
   const { isLoading, data } = useQuery({
     queryKey: ["fetchQuizList", year, order, quizNum],
-    queryFn: async () => {
-      const snapshot = await quizListApi(year, order, quizNum);
-      if (snapshot.exists()) {
-        const item = snapshot.val();
-        return item;
-      } else {
-        return null;
-      }
-    },
+    // queryFn: async () => {
+    //   const snapshot = await quizListApi(year, order, quizNum);
+    //   if (snapshot.exists()) {
+    //     const item = snapshot.val();
+    //     return item;
+    //   } else {
+    //     return null;
+    //   }
+    // },
+    queryFn: () => ({
+      title: "",
+      distractor1: "",
+      distractor2: "",
+      distractor3: "",
+      distractor4: "",
+    }),
   });
 
   return isLoading ? (

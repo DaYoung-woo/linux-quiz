@@ -19,19 +19,20 @@ function QuizList() {
 
   const { isLoading, data } = useQuery({
     queryKey: ["fetchQuizList", paramObj],
-    queryFn: async () => {
-      const snapshot = await quizListApi(paramObj?.year, paramObj.order, "");
-      if (snapshot.exists()) {
-        const list = snapshot
-          .val()
-          .filter((el) => !!el)
-          .sort();
-        setUserQuizList(list);
-        return list;
-      } else {
-        return [];
-      }
-    },
+    queryFn: () => [],
+    // queryFn: async () => {
+    //   const snapshot = await quizListApi(paramObj?.year, paramObj.order, "");
+    //   if (snapshot.exists()) {
+    //     const list = snapshot
+    //       .val()
+    //       .filter((el) => !!el)
+    //       .sort();
+    //     setUserQuizList(list);
+    //     return list;
+    //   } else {
+    //     return [];
+    //   }
+    // },
   });
 
   return isLoading ? (

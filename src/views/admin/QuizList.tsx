@@ -2,12 +2,12 @@ import { Link } from "react-router-dom";
 import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import { ReactComponent as Trashbin } from "../../assets/img/trashbin.svg";
 import { useQuery } from "@tanstack/react-query";
-import { categoryListApi, quizListApiTest } from "../../api/api";
+import { categoryListApi, quizListApi } from "../../api/api";
 import { useEffect, useState } from "react";
 
 function Quiz() {
   const [category, setCategory] = useState("");
-  const [quizList, setQuizList] = useState([])
+  const [quizList, setQuizList] = useState([]);
 
   // 카테고리 리스트 api 요청
   const { status, data } = useQuery({
@@ -15,26 +15,25 @@ function Quiz() {
     queryFn: () => categoryListApi(),
   });
 
-  const getQuizList  = async() => {
-    try{
-      const list =  await quizListApiTest(category);
-      setQuizList(list)
-    } catch(e) {
-      console.log(e)
+  const getQuizList = async () => {
+    try {
+      const list = await quizListApi(category);
+      setQuizList(list);
+    } catch (e) {
+      console.log(e);
     }
-      
-  }
+  };
 
   useEffect(() => {
-    if (status === 'success' && data.length) {
-      setCategory(data[0]?.id);  
+    if (status === "success" && data.length) {
+      setCategory(data[0]?.id);
     }
   }, [status]);
 
   useEffect(() => {
-    if(!!category)getQuizList();
+    if (!!category) getQuizList();
   }, [category]);
-  
+
   return (
     <div>
       <h1>문제 관리</h1>
@@ -68,25 +67,32 @@ function Quiz() {
         </Link>
       </div>
       <ul className="quiz-list">
-        {
-          quizList.map(el => (
-            <Link to={`/admin/quiz_form?category=${category}&quizNum=${Object.keys(el)[0]}`} key={Object.keys(el)[0]}>
-              <li className="bg  hover:bg-slate-50">
-                <div className="pl-3">
-                  <span className=" text-gray-500">
-                    {category.split('-')[0]}년도 {category.split('-')[1]}회차 {Object.keys(el)[0]}번
-                  </span>
-                  <p className="font-medium">
-                    {el[Object.keys(el)[0]].title.length > 50
-                      ? `${el[Object.keys(el)[0]].title.substring(0, 50)}...`
-                      : el[Object.keys(el)[0]].title}
-                  </p>
-                </div>
-                <Trashbin className="mr-2" height="16px" fill="#6B7280" />
-              </li>
-            </Link>
-          ))
-        }
+        {quizList.map((el) => (
+          <Link
+            to={`/admin/quiz_form?category=${category}&quizNum=${
+              Object.keys(el)[0]
+            }`}
+            key={Object.keys(el)[0]}
+          >
+            <li className="bg  hover:bg-slate-50">
+              <div className="pl-3">
+                <span className=" text-gray-500">
+                  {category.split("-")[0]}년도 {category.split("-")[1]}회차{" "}
+                  {Object.keys(el)[0]}번
+                </span>
+                <p className="font-medium">
+                  {el[Object.keys(el)[0]].title.length > 50
+                    ? `${el[Object.keys(el)[0]].title.substring(0, 50)}...`
+                    : el[Object.keys(el)[0]].title}
+                </p>
+              </div>
+              <Trashbin className="mr-2" height="16px" fill="#6B7280" />
+            </li>
+          </Link>
+        ))}
+        {!quizList.length && (
+          <div className="text-center mt-36">등록된 데이터가 없습니다</div>
+        )}
       </ul>
     </div>
   );
