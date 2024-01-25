@@ -23,6 +23,7 @@ function QuizForm() {
   const [addAlert, setAddAlert] = useState(false);
   const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
   const [btnDisabled, setDisabled] = useState(true);
+  const [attachment, setAttachment] = useState(null);
   const navigation = useNavigate();
 
   // 카테고리 리스트 api 요청
@@ -38,7 +39,21 @@ function QuizForm() {
   };
 
   const getFile = (e) => {
-    console.log(e);
+    // 업로드 된 file
+    const files = e.target.files;
+    const theFile = files[0];
+
+    // FileReader 생성
+    const reader = new FileReader();
+
+    // file 업로드가 완료되면 실행
+    reader.onloadend = (finishedEvent) => {
+      // 업로드한 이미지 URL 저장
+      const result = (finishedEvent.currentTarget as FileReader)?.result;
+      setAttachment(result);
+    };
+    // 파일 정보를 읽기
+    reader.readAsDataURL(theFile);
   };
 
   // 저장 버튼 클릭
@@ -78,6 +93,11 @@ function QuizForm() {
       .filter((el) => el !== "id")
       .find((el) => !newFormData[el]);
     setDisabled(!!valid);
+  };
+
+  // 이미지 삭제
+  const onClearAttachment = () => {
+    setAttachment(null);
   };
 
   return (
@@ -134,13 +154,27 @@ function QuizForm() {
             value={formData.title}
             onChange={handleChange}
           />
+
+          <label htmlFor="upload-image" className="mt-3">
+            <div className="border border-slate-300 w-40 mt-3 h-40">
+              이미지 업로드
+            </div>
+          </label>
           <input
             type="file"
             hidden
+            name="upload-image"
             id="upload-image"
             accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
             onChange={(e) => getFile(e)}
           />
+
+          {attachment && (
+            <div>
+              <img src={attachment} width="50px" height="50px" alt="" />
+              <button onClick={onClearAttachment}>Clear</button>
+            </div>
+          )}
 
           <h4 className="pt-6">보기</h4>
           <input

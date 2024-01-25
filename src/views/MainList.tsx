@@ -2,7 +2,6 @@ import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { categoryListApi } from "../api/api";
-import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { categoryListAtom } from "../api/recoil";
 

@@ -141,3 +141,9 @@ ul.quiz-list {
     margin-bottom: 10px;
   }
 }
+
+.user-quiz-form {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 25px 1fr 25px;
+}

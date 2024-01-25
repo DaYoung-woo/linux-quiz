@@ -1,27 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { quizListApi } from "../api/api";
-import { quizListAtom } from "../api/recoil";
-import { useSetRecoilState } from "recoil";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
-import { useEffect } from "react";
 
 function QuizList() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
-  const setQuizList = useSetRecoilState(quizListAtom);
 
   // 문제 조회 api 요청
   const { status, data: quizList } = useQuery({
-    queryKey: ["fetchCategoryList", category],
+    queryKey: ["fetchQuizList", category],
     queryFn: () => quizListApi(category),
     enabled: !!category,
   });
-
-  useEffect(() => {
-    if (!!quizList) setQuizList(quizList);
-    console.log(quizList);
-  }, [quizList]);
 
   function renderCategoryHeader() {
     const [year, round] = category.split("-");
