@@ -155,11 +155,16 @@ function QuizForm() {
             onChange={handleChange}
           />
 
-          <label htmlFor="upload-image" className="mt-3">
-            <div className="border border-slate-300 w-40 mt-3 h-40">
-              이미지 업로드
-            </div>
-          </label>
+          {!attachment && (
+            <label htmlFor="upload-image" className="mt-3">
+              <div className="border border-slate-200 w-40 mt-3 h-40 text-center flex items-center justify-center">
+                문제
+                <br />
+                이미지 업로드
+              </div>
+            </label>
+          )}
+
           <input
             type="file"
             hidden
@@ -170,9 +175,14 @@ function QuizForm() {
           />
 
           {attachment && (
-            <div>
-              <img src={attachment} width="50px" height="50px" alt="" />
-              <button onClick={onClearAttachment}>Clear</button>
+            <div className="flex mt-4 items-center">
+              <img src={attachment} alt="" className="border p-4" />
+              <button
+                onClick={onClearAttachment}
+                className="bg-indigo-500 rounded-md text-slate-50 h-10 px-4 ml-10"
+              >
+                이미지 삭제
+              </button>
             </div>
           )}
 

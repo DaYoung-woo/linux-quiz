@@ -42,8 +42,8 @@ function QuizForm() {
             answer === index &&
             "border-red-500"
           } 
-          ${answer === index && !submit && "border-slate-500"}
-          px-3 py-2 my-1 flex justify-between rounded-md w-full `}
+          ${answer === index && !submit && "border-slate-500 "}
+          px-3 py-2 my-1 flex justify-between w-full bg-white`}
         onClick={() => chnageAnswer(index)}
       >
         {quiz[Object.keys(quiz)[0]][`distractor${index}`]}
@@ -57,18 +57,20 @@ function QuizForm() {
     if (!quizList.length) return <div>등록된 문제가 없습니다.</div>;
     return (
       <div className="user-quiz-form">
-        <ArrowLeft height="16px" fill="#6B7280" />
+        <div className="flex items-center">
+          <ArrowLeft width="100%" fill="#6B7280" />
+        </div>
         {quizList
           .filter((el) => Object.keys(el)[0] === quizNum)
           .map((quiz) => (
-            <div className="m-4 mt-8" key={quiz[Object.keys(quiz)[0]].title}>
-              <h3 className="font-medium">
+            <div className="mb-4 mt-8" key={quiz[Object.keys(quiz)[0]].title}>
+              <h3 className="font-medium ">
                 {quiz[Object.keys(quiz)[0]].title}
               </h3>
               <div className="pt-6 pb-1">{distractorBtn(quiz, 1)}</div>
               <div className="pb-1">{distractorBtn(quiz, 2)}</div>
               <div className="pb-1">{distractorBtn(quiz, 3)}</div>
-              <div className="pb-1">{distractorBtn(quiz, 4)}</div>
+              <div className="pb-1 mb-5">{distractorBtn(quiz, 4)}</div>
 
               {!submit && (
                 <button
@@ -93,13 +95,18 @@ function QuizForm() {
               )}
 
               {submit && (
-                <div className="my-8 p-4 bg-slate-100 rounded-md ">
+                <div className="my-8 p-4 bg-white ">
+                  <p className="mb-2 font-medium text-indigo-500">
+                    정답 {quiz[Object.keys(quiz)[0]].answer}번
+                  </p>
                   {quiz[Object.keys(quiz)[0]].desc}
                 </div>
               )}
             </div>
           ))}
-        <ArrowRight height="16px" fill="#6B7280" />
+        <div className="flex items-center">
+          <ArrowRight fill="#6B7280" width="100%" className="" />
+        </div>
       </div>
     );
   }

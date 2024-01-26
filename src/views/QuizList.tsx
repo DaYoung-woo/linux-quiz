@@ -28,12 +28,12 @@ function QuizList() {
         key={quizNumber}
         to={`/quiz_form?category=${category}&quizNum=${quizNum}`}
       >
-        <div className="border border-slate-200 px-3 py-2 my-1 flex justify-between items-center rounded-md">
+        <div className="border border-slate-200 px-3 py-2 my-1 flex justify-between items-center  bg-white shadow-sm">
           <div>
-            <span className="text-gray-500">{quizNumber}번</span>
-            <p className="font-medium">{title}</p>
+            <span className="font-medium text-indigo-500">{quizNumber}번</span>
+            <p>{title}</p>
           </div>
-          <ArrowRight />
+          <ArrowRight fill="rgb(99, 102, 241)" />
         </div>
       </Link>
     );
@@ -45,8 +45,8 @@ function QuizList() {
     if (!quizList.length) return <div>등록된 문제가 없습니다.</div>;
 
     return (
-      <div className="px-4 mt-2">
-        <h4 className="py-2 font-semibold">{renderCategoryHeader()}</h4>
+      <div className="px-4 mt-4">
+        <h4 className="py-2 font-semibold ">{renderCategoryHeader()}</h4>
         {quizList.map(renderQuizItem)}
       </div>
     );
