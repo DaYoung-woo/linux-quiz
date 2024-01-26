@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { quizSaveApi, categoryListApi } from "../../api/api";
+import { quizSaveApi, categoryListApi, imgSave } from "../../api/api";
 import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import AlertPopup from "../../components/common/AlertPopup";
 import { useQuery } from "@tanstack/react-query";
@@ -24,6 +24,8 @@ function QuizForm() {
   const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
   const [btnDisabled, setDisabled] = useState(true);
   const [attachment, setAttachment] = useState(null);
+  const [attachmentName, setAttachmentName] = useState(null);
+  const [photo, setPhoto] = useState(null);
   const navigation = useNavigate();
 
   // 카테고리 리스트 api 요청
@@ -43,6 +45,7 @@ function QuizForm() {
     const files = e.target.files;
     const theFile = files[0];
 
+    setAttachmentName(theFile.name);
     // FileReader 생성
     const reader = new FileReader();
 
@@ -54,6 +57,7 @@ function QuizForm() {
     };
     // 파일 정보를 읽기
     reader.readAsDataURL(theFile);
+    setPhoto(theFile);
   };
 
   // 저장 버튼 클릭
@@ -64,18 +68,26 @@ function QuizForm() {
 
   // 저장 api 요청
   const addQuiz = async () => {
+    const id = `${formData.category}-${formData.quizNum}`;
     const param = {
-      id: `${formData.category}${formData.quizNum}`,
       ...formData,
+      id,
       year: formData.category.split("-")[0],
       order: formData.category.split("-")[1],
+      photo: "",
     };
     try {
+      // 파일 업로드
+      if (attachment) {
+        await imgSave(attachmentName, photo);
+        param.photo = attachmentName;
+      }
       await quizSaveApi(param);
       setAddAlert(true);
       setTimeout(() => closeAddAlert(), 2000);
     } catch (e) {
-      alert("문제가 발생했어요😭");
+      console.log(e);
+      alert("퀴즈 파일 업로드에 문제가 발생했어요😭");
     }
   };
 
@@ -155,11 +167,16 @@ function QuizForm() {
             onChange={handleChange}
           />
 
-          <label htmlFor="upload-image" className="mt-3">
-            <div className="border border-slate-300 w-40 mt-3 h-40">
-              이미지 업로드
-            </div>
-          </label>
+          {!attachment && (
+            <label htmlFor="upload-image" className="mt-3">
+              <div className="border border-slate-200 w-40 mt-3 h-40 text-center flex items-center justify-center">
+                문제
+                <br />
+                이미지 업로드
+              </div>
+            </label>
+          )}
+
           <input
             type="file"
             hidden
@@ -170,9 +187,14 @@ function QuizForm() {
           />
 
           {attachment && (
-            <div>
-              <img src={attachment} width="50px" height="50px" alt="" />
-              <button onClick={onClearAttachment}>Clear</button>
+            <div className="flex mt-4 items-center">
+              <img src={attachment} alt="" className="border p-4" />
+              <button
+                onClick={onClearAttachment}
+                className="bg-indigo-500 rounded-md text-slate-50 h-10 px-4 ml-10"
+              >
+                이미지 삭제
+              </button>
             </div>
           )}
 

@@ -39,27 +39,32 @@ function MainList() {
         </div>
       )}
       {status === "success" && (
-        <div className="quiz-list pt-2">
+        <div className="quiz-list pt-4">
           {!!categoryList &&
             [...new Set(categoryList.map((el) => el.year))].map((el) => (
-              <div key={el}>
-                <h4 className="mt-4 mb-2 font-semibold">{el}</h4>
+              <div key={el} className="mb-8 shadow-sm bg-white p-4 border">
+                <h4 className="mb-4 font-semibold ">{el}년도</h4>
                 {categoryList
                   .filter((quiz) => quiz.year === el)
                   .map(({ id, year, order }) => (
-                    <Link to={`/quiz_list?category=${id}`} key={id}>
-                      <div className="flex hover:bg-slate-50  border px-4 py-2 items-center mt-1 justify-between">
+                    <Link
+                      to={`/quiz_list?category=${id}`}
+                      key={`year${year}order${order}`}
+                    >
+                      <div className="flex px-4 py-2 items-center mt-1 justify-between bg-indigo-50 ">
                         <div>
                           {year}년도 {order}회차
                         </div>
-                        <ArrowRight height="16px" fill="#6B7280" />
+                        <ArrowRight height="16px" fill="#6366f1" />
                       </div>
                     </Link>
                   ))}
               </div>
             ))}
           {!categoryList.length && (
-            <div className="text-center mt-36">등록된 데이터가 없습니다</div>
+            <div className="text-center mt-36 user-quiz-form">
+              등록된 데이터가 없습니다
+            </div>
           )}
         </div>
       )}
