@@ -24,6 +24,8 @@ function QuizForm() {
   const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
   const [btnDisabled, setDisabled] = useState(true);
   const [attachment, setAttachment] = useState(null);
+  const [attachmentName, setAttachmentName] = useState(null);
+  const [photo, setPhoto] = useState(null);
   const navigation = useNavigate();
 
   // 카테고리 리스트 api 요청
@@ -43,6 +45,7 @@ function QuizForm() {
     const files = e.target.files;
     const theFile = files[0];
 
+    setAttachmentName(theFile.name);
     // FileReader 생성
     const reader = new FileReader();
 
@@ -54,6 +57,7 @@ function QuizForm() {
     };
     // 파일 정보를 읽기
     reader.readAsDataURL(theFile);
+    setPhoto(theFile);
   };
 
   // 저장 버튼 클릭
@@ -70,14 +74,13 @@ function QuizForm() {
       id,
       year: formData.category.split("-")[0],
       order: formData.category.split("-")[1],
-      photo: false,
+      photo: "",
     };
     try {
       // 파일 업로드
       if (attachment) {
-        console.log(attachment);
-        await imgSave(id, attachment);
-        param.photo = true;
+        await imgSave(attachmentName, photo);
+        param.photo = attachmentName;
       }
       await quizSaveApi(param);
       setAddAlert(true);

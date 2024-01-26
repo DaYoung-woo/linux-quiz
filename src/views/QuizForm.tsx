@@ -1,11 +1,12 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { quizListApi } from "../api/api";
-import { useState } from "react";
+import { quizImgApi, quizListApi } from "../api/api";
+import { useEffect, useState } from "react";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
 import { ReactComponent as ArrowLeft } from "../assets/img/arrow_left.svg";
 
 function QuizForm() {
+  const [photo, setPhoto] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [submit, setSubmit] = useState(false);
   const [searchParams] = useSearchParams();
@@ -26,6 +27,23 @@ function QuizForm() {
   const chnageAnswer = (index) => {
     if (!submit) setAnswer(index);
   };
+
+  const getImg = async () => {
+    try {
+      const photoValue = quizList.filter(
+        (el) => Object.keys(el)[0] === quizNum
+      )[0][quizNum].photo;
+
+      const url = await quizImgApi(photoValue);
+      setPhoto(url);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    if (status === "success") getImg();
+  }, [status]);
 
   // 4지 선다
   const distractorBtn = (quiz, index) => {
@@ -111,6 +129,9 @@ function QuizForm() {
                   <h3 className="font-medium ">
                     {quiz[Object.keys(quiz)[0]].title}
                   </h3>
+                  {!!photo && (
+                    <img src={photo} alt="photo" className="w-full" />
+                  )}
                   <div className="pt-6 pb-1">{distractorBtn(quiz, 1)}</div>
                   <div className="pb-1">{distractorBtn(quiz, 2)}</div>
                   <div className="pb-1">{distractorBtn(quiz, 3)}</div>

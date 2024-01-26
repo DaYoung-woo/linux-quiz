@@ -7,7 +7,13 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { db, storage } from "../utils/firebase";
-import { ref, uploadBytes, uploadString } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+  uploadString,
+} from "firebase/storage";
 
 // 카테고리 리스트
 export const categoryListApi = async () => {
@@ -34,9 +40,9 @@ export const categorySaveApi = (param) => {
 };
 
 // 문제 이미지 저장
-export const imgSave = (id, attachment) => {
-  const fileRef = ref(storage, `images/${id}`); // 파일 참조 생성
-  return uploadBytes(fileRef, attachment);
+export const imgSave = (name, attachment) => {
+  const fileRef = ref(storage, `images/${name}`); // 파일 참조 생성
+  return uploadBytesResumable(fileRef, attachment);
 };
 
 // 문제 저장
@@ -55,4 +61,9 @@ export const quizListApi = async (category) => {
     snapshot.forEach((doc) => list.push(doc.data()));
     return list;
   } else return [];
+};
+
+// 문제 이미지
+export const quizImgApi = async (id) => {
+  return getDownloadURL(ref(storage, `images/${id}`));
 };
