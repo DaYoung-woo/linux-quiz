@@ -26,7 +26,7 @@ function Quiz() {
 
   // 상세 화면 이동
   const movaPage = (quiz) => {
-    navigate(`admin/quiz_form?category=${category}&quizNum=${quiz}`);
+    navigate(`/admin/quiz_form?category=${category}&quizNum=${quiz}`);
   };
 
   // 퀴즈 삭제
@@ -77,7 +77,7 @@ function Quiz() {
             ))}
         </select>
 
-        <Link to="/admin/quiz_form">
+        <Link to={`admin/quiz_form?category=${category}`}>
           <button className="flex items-center pl-7 pr-8 py-2 bg-indigo-500 rounded-md text-slate-50">
             <Plus fill="white" />
             <span className="lh-25">문제 추가</span>
