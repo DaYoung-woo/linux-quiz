@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { quizSaveApi, categoryListApi } from "../../api/api";
+import { quizSaveApi, categoryListApi, imgSave } from "../../api/api";
 import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import AlertPopup from "../../components/common/AlertPopup";
 import { useQuery } from "@tanstack/react-query";
@@ -64,17 +64,26 @@ function QuizForm() {
 
   // 저장 api 요청
   const addQuiz = async () => {
+    const id = `${formData.category}-${formData.quizNum}`;
     const param = {
-      id: `${formData.category}${formData.quizNum}`,
       ...formData,
+      id,
       year: formData.category.split("-")[0],
       order: formData.category.split("-")[1],
+      photo: false,
     };
     try {
+      // 파일 업로드
+      if (attachment) {
+        console.log(attachment);
+        await imgSave(id, attachment);
+        param.photo = true;
+      }
       await quizSaveApi(param);
       setAddAlert(true);
       setTimeout(() => closeAddAlert(), 2000);
     } catch (e) {
+      console.log(e);
       alert("문제가 발생했어요😭");
     }
   };

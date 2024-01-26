@@ -27,6 +27,7 @@ function QuizForm() {
     if (!submit) setAnswer(index);
   };
 
+  // 4지 선다
   const distractorBtn = (quiz, index) => {
     return (
       <button
@@ -51,62 +52,80 @@ function QuizForm() {
     );
   };
 
+  // submit 버튼
+  const submitBtn = () => {
+    return (
+      <button
+        disabled={!answer}
+        className="w-full text-center py-2 bg-indigo-500 rounded-md text-slate-50 disabled:bg-slate-200 disabled:text-slate-400"
+        onClick={() => submitQuiz()}
+      >
+        SUBMIT
+      </button>
+    );
+  };
+
+  // Next 버튼
+  const nextBtn = () => {
+    return (
+      <Link to="">
+        <button
+          disabled={!answer}
+          className="w-full text-center py-2 bg-indigo-500 border rounded-md text-slate-50"
+        >
+          NEXT
+        </button>
+      </Link>
+    );
+  };
+
+  // 정답 해설 컴포넌트
+  const showDesc = (quiz) => {
+    if (!submit) return "";
+    else
+      return (
+        <div className="my-8 p-4 bg-white mx-10">
+          <p className="mb-2 font-medium text-indigo-500">
+            정답 {quiz.answer}번
+          </p>
+          {quiz.desc}
+        </div>
+      );
+  };
+
   if (status === "pending") return <div>...loading</div>;
 
   if (status === "success") {
     if (!quizList.length) return <div>등록된 문제가 없습니다.</div>;
     return (
-      <div className="user-quiz-form">
-        <div className="flex items-center">
-          <ArrowLeft width="100%" fill="#6B7280" />
-        </div>
+      <div>
         {quizList
           .filter((el) => Object.keys(el)[0] === quizNum)
           .map((quiz) => (
             <div className="mb-4 mt-8" key={quiz[Object.keys(quiz)[0]].title}>
-              <h3 className="font-medium ">
-                {quiz[Object.keys(quiz)[0]].title}
-              </h3>
-              <div className="pt-6 pb-1">{distractorBtn(quiz, 1)}</div>
-              <div className="pb-1">{distractorBtn(quiz, 2)}</div>
-              <div className="pb-1">{distractorBtn(quiz, 3)}</div>
-              <div className="pb-1 mb-5">{distractorBtn(quiz, 4)}</div>
-
-              {!submit && (
-                <button
-                  disabled={!answer}
-                  className="w-full text-center py-2 bg-indigo-500 rounded-md text-slate-50 disabled:bg-slate-200 disabled:text-slate-400"
-                  onClick={() => submitQuiz()}
-                >
-                  SUBMIT
-                </button>
-              )}
-
-              {submit && (
-                <Link to="">
-                  <button
-                    disabled={!answer}
-                    className="w-full text-center py-2 bg-indigo-500 border rounded-md text-slate-50"
-                    onClick={() => submitQuiz()}
-                  >
-                    NEXT
-                  </button>
-                </Link>
-              )}
-
-              {submit && (
-                <div className="my-8 p-4 bg-white ">
-                  <p className="mb-2 font-medium text-indigo-500">
-                    정답 {quiz[Object.keys(quiz)[0]].answer}번
-                  </p>
-                  {quiz[Object.keys(quiz)[0]].desc}
+              <div className="user-quiz-form">
+                <div className="flex items-center">
+                  <ArrowLeft width="100%" fill="#6B7280" />
                 </div>
-              )}
+                <article>
+                  <h3 className="font-medium ">
+                    {quiz[Object.keys(quiz)[0]].title}
+                  </h3>
+                  <div className="pt-6 pb-1">{distractorBtn(quiz, 1)}</div>
+                  <div className="pb-1">{distractorBtn(quiz, 2)}</div>
+                  <div className="pb-1">{distractorBtn(quiz, 3)}</div>
+                  <div className="pb-1 mb-5">{distractorBtn(quiz, 4)}</div>
+
+                  {!submit && submitBtn()}
+                  {submit && nextBtn()}
+                </article>
+                <div className="flex items-center">
+                  <ArrowRight fill="#6B7280" width="100%" className="" />
+                </div>
+              </div>
+              {showDesc(quiz[Object.keys(quiz)[0]])}
             </div>
           ))}
-        <div className="flex items-center">
-          <ArrowRight fill="#6B7280" width="100%" className="" />
-        </div>
       </div>
     );
   }

@@ -5,14 +5,14 @@ import {
   orderBy,
   query,
   setDoc,
-  where,
 } from "firebase/firestore";
-import { fdb, rdb } from "../utils/firebase";
+import { db, storage } from "../utils/firebase";
+import { ref, uploadBytes, uploadString } from "firebase/storage";
 
 // 카테고리 리스트
 export const categoryListApi = async () => {
   const docQuery = query(
-    collection(fdb, "category_list"),
+    collection(db, "category_list"),
     orderBy("year", "desc")
   );
   try {
@@ -30,7 +30,13 @@ export const categoryListApi = async () => {
 
 // 카테고리 저장
 export const categorySaveApi = (param) => {
-  return setDoc(doc(fdb, "category_list", param.id), param);
+  return setDoc(doc(db, "category_list", param.id), param);
+};
+
+// 문제 이미지 저장
+export const imgSave = (id, attachment) => {
+  const fileRef = ref(storage, `images/${id}`); // 파일 참조 생성
+  return uploadBytes(fileRef, attachment);
 };
 
 // 문제 저장
@@ -38,12 +44,12 @@ export const quizSaveApi = (param) => {
   const { category, quizNum } = param;
   const payload = {};
   payload[quizNum] = param;
-  return setDoc(doc(fdb, category, quizNum), payload);
+  return setDoc(doc(db, category, quizNum), payload);
 };
 
 // 문제 리스트
 export const quizListApi = async (category) => {
-  const snapshot = await getDocs(collection(fdb, category));
+  const snapshot = await getDocs(collection(db, category));
   if (!!snapshot) {
     const list = [];
     snapshot.forEach((doc) => list.push(doc.data()));
