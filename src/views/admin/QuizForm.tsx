@@ -87,7 +87,7 @@ function QuizForm() {
       setTimeout(() => closeAddAlert(), 2000);
     } catch (e) {
       console.log(e);
-      alert("문제가 발생했어요😭");
+      alert("퀴즈 파일 업로드에 문제가 발생했어요😭");
     }
   };
 

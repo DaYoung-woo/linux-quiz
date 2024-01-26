@@ -5,6 +5,7 @@ import {
   orderBy,
   query,
   setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db, storage } from "../utils/firebase";
 import {
@@ -63,7 +64,12 @@ export const quizListApi = async (category) => {
   } else return [];
 };
 
-// 문제 이미지
+// 문제 이미지 로드
 export const quizImgApi = async (id) => {
   return getDownloadURL(ref(storage, `images/${id}`));
+};
+
+// 문제 삭제
+export const deleteQuizAip = async (category, quizNum) => {
+  return deleteDoc(doc(db, category, quizNum));
 };

@@ -44,7 +44,8 @@ function QuizList() {
   if (status === "pending") return <div>...loading</div>;
 
   if (status === "success") {
-    if (!quizList.length) return <div>등록된 문제가 없습니다.</div>;
+    if (!quizList.length)
+      return <div className="user-no-list">등록된 문제가 없습니다.</div>;
 
     return (
       <div className="px-4 mt-4">

@@ -47,7 +47,10 @@ function MainList() {
                 {categoryList
                   .filter((quiz) => quiz.year === el)
                   .map(({ id, year, order }) => (
-                    <Link to={`/quiz_list?category=${id}`} key={id}>
+                    <Link
+                      to={`/quiz_list?category=${id}`}
+                      key={`year${year}order${order}`}
+                    >
                       <div className="flex px-4 py-2 items-center mt-1 justify-between bg-indigo-50 ">
                         <div>
                           {year}년도 {order}회차
@@ -59,7 +62,9 @@ function MainList() {
               </div>
             ))}
           {!categoryList.length && (
-            <div className="text-center mt-36">등록된 데이터가 없습니다</div>
+            <div className="text-center mt-36 user-quiz-form">
+              등록된 데이터가 없습니다
+            </div>
           )}
         </div>
       )}
