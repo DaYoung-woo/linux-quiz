@@ -1,9 +1,26 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { quizSaveApi, categoryListApi, imgSave } from "../../api/api";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  quizSaveApi,
+  categoryListApi,
+  imgSave,
+  quizListApi,
+} from "../../api/api";
 import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import AlertPopup from "../../components/common/AlertPopup";
 import { useQuery } from "@tanstack/react-query";
+
+interface quizObjType {
+  category: "";
+  quizNum: "";
+  title: "";
+  distractor1: "";
+  distractor2: "";
+  distractor3: "";
+  distractor4: "";
+  desc: "";
+  answer: "";
+}
 
 function QuizForm() {
   // 기본 객체
@@ -20,19 +37,46 @@ function QuizForm() {
   };
   // 문제 번호 생성
   const quizNums = Array.from({ length: 100 }, (_, index) => index + 1);
+  // url 파라미터
+  const [searchParams] = useSearchParams();
+
   const [addAlert, setAddAlert] = useState(false);
-  const [formData, setFormData] = useState({ ...defaultQuiz, id: "" });
+  const [formData, setFormData] = useState({ ...defaultQuiz });
   const [btnDisabled, setDisabled] = useState(true);
   const [attachment, setAttachment] = useState(null);
   const [attachmentName, setAttachmentName] = useState(null);
   const [photo, setPhoto] = useState(null);
   const navigation = useNavigate();
+  const category = searchParams.get("category");
+  const quizNum = searchParams.get("quizNum");
+  let initialQuiz = true;
 
   // 카테고리 리스트 api 요청
   const { status, data } = useQuery({
     queryKey: ["fetchCategoryList"],
     queryFn: () => categoryListApi(),
   });
+
+  // 문제 조회 api 요청
+  useQuery({
+    queryKey: ["fetchQuizList", category],
+    queryFn: () => loadQuiz(),
+    enabled: !!category && initialQuiz,
+  });
+
+  // 문제 조회 후 formData 세팅
+  const loadQuiz = async () => {
+    try {
+      const list = await quizListApi(category);
+      const quiz = list.filter((el) => Object.keys(el)[0] === quizNum);
+      const quizCopy = { ...defaultQuiz };
+      // Object.keys(defaultQuiz).forEach((el) => (quizCopy[el] = quiz[el]));
+      // setFormData(quizCopy);
+      return list;
+    } catch (e) {
+      alert("퀴즈 상세 api 조회에 실패했어요😭");
+    }
+  };
 
   // 모달 닫고 메인 화면 이동
   const closeAddAlert = () => {
