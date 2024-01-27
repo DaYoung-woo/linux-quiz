@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { quizImgApi, quizListApi } from "../api/api";
+import { quizImgApi, quizDetailApi } from "../api/api";
 import { useEffect, useState } from "react";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
 import { ReactComponent as ArrowLeft } from "../assets/img/arrow_left.svg";
@@ -14,50 +14,59 @@ function QuizForm() {
   const quizNum = searchParams.get("quizNum");
 
   // 문제 조회 api 요청
-  const { status, data: quizList } = useQuery({
-    queryKey: ["fetchQuizList", category],
-    queryFn: () => quizListApi(category),
-    enabled: !!category,
+  const { status, data } = useQuery({
+    queryKey: ["fetchQuizDetail", category, quizNum],
+    queryFn: () => getQuizDetail(),
   });
 
-  const submitQuiz = () => {
-    setSubmit(true);
+  // 문제 조회 api 응답 처리
+  const getQuizDetail = async () => {
+    try {
+      const item = await quizDetailApi(category, quizNum);
+      return item[quizNum] || [];
+    } catch (e) {
+      alert("퀴즈를 불러오는데 실패했어요");
+    }
   };
 
+  // 문제 사진 api 요청
+  useQuery({
+    queryKey: ["fetchQuizPhoto", category, quizNum],
+    queryFn: () => getImg(),
+    enabled: !!data?.photo,
+  });
+
+  // 이미지 로드 api 응답 처리
+  const getImg = async () => {
+    console.log(data.photo);
+    try {
+      const url = await quizImgApi(data.photo);
+      setPhoto(url);
+      return data.photo;
+    } catch (e) {
+      alert("퀴즈 문제 이미지를 불러오는데 실패했어요");
+    }
+  };
+
+  // 정답 선택
   const chnageAnswer = (index) => {
     if (!submit) setAnswer(index);
   };
 
-  const getImg = async () => {
-    try {
-      const photoValue = quizList.filter(
-        (el) => Object.keys(el)[0] === quizNum
-      )[0][quizNum].photo;
-
-      const url = await quizImgApi(photoValue);
-      setPhoto(url);
-    } catch (e) {
-      console.log(e);
-    }
+  // 정답 확인
+  const submitQuiz = () => {
+    setSubmit(true);
   };
 
-  useEffect(() => {
-    if (status === "success") getImg();
-  }, [status]);
-
   // 4지 선다
-  const distractorBtn = (quiz, index) => {
+  const distractorBtn = (distractor, index) => {
     return (
       <button
         className={`border 
+          ${submit && index === Number(data.answer) && "border-blue-500"} 
           ${
             submit &&
-            index === Number(quiz[Object.keys(quiz)[0]].answer) &&
-            "border-blue-500"
-          } 
-          ${
-            submit &&
-            index !== Number(quiz[Object.keys(quiz)[0]].answer) &&
+            index !== Number(data.answer) &&
             answer === index &&
             "border-red-500"
           } 
@@ -65,7 +74,7 @@ function QuizForm() {
           px-3 py-2 my-1 flex justify-between w-full bg-white`}
         onClick={() => chnageAnswer(index)}
       >
-        {quiz[Object.keys(quiz)[0]][`distractor${index}`]}
+        {distractor}
       </button>
     );
   };
@@ -98,15 +107,15 @@ function QuizForm() {
   };
 
   // 정답 해설 컴포넌트
-  const showDesc = (quiz) => {
+  const showDesc = () => {
     if (!submit) return "";
     else
       return (
         <div className="my-8 p-4 bg-white mx-10">
           <p className="mb-2 font-medium text-indigo-500">
-            정답 {quiz.answer}번
+            정답 {data.answer}번
           </p>
-          {quiz.desc}
+          {data.desc}
         </div>
       );
   };
@@ -114,40 +123,37 @@ function QuizForm() {
   if (status === "pending") return <div>...loading</div>;
 
   if (status === "success") {
-    if (!quizList.length)
+    if (!data)
       return <div className="user-quiz-form">등록된 문제가 없습니다.</div>;
     return (
       <div>
-        {quizList
-          .filter((el) => Object.keys(el)[0] === quizNum)
-          .map((quiz) => (
-            <div className="mb-4 mt-8" key={quiz[Object.keys(quiz)[0]].title}>
-              <div className="user-quiz-form">
-                <div className="flex items-center">
-                  <ArrowLeft width="100%" fill="#6B7280" />
-                </div>
-                <article>
-                  <h3 className="font-medium ">
-                    {quiz[Object.keys(quiz)[0]].title}
-                  </h3>
-                  {!!photo && (
-                    <img src={photo} alt="photo" className="w-full" />
-                  )}
-                  <div className="pt-6 pb-1">{distractorBtn(quiz, 1)}</div>
-                  <div className="pb-1">{distractorBtn(quiz, 2)}</div>
-                  <div className="pb-1">{distractorBtn(quiz, 3)}</div>
-                  <div className="pb-1 mb-5">{distractorBtn(quiz, 4)}</div>
-
-                  {!submit && submitBtn()}
-                  {submit && nextBtn()}
-                </article>
-                <div className="flex items-center">
-                  <ArrowRight fill="#6B7280" width="100%" className="" />
-                </div>
-              </div>
-              {showDesc(quiz[Object.keys(quiz)[0]])}
+        <div className="mb-4 mt-8" key={data.title}>
+          <div className="user-quiz-form">
+            <div className="flex items-center">
+              <ArrowLeft width="100%" fill="#6B7280" />
             </div>
-          ))}
+            <article>
+              <h3 className="font-medium ">
+                {data.quizNum}. {data.title}
+              </h3>
+              {!!photo && <img src={photo} alt="photo" className="w-full" />}
+              <div className="pt-6 pb-1">
+                {distractorBtn(data.distractor1, 1)}
+              </div>
+              <div className="pb-1">{distractorBtn(data.distractor2, 2)}</div>
+              <div className="pb-1">{distractorBtn(data.distractor3, 3)}</div>
+              <div className="pb-1 mb-5">
+                {distractorBtn(data.distractor4, 4)}
+              </div>
+              {!submit && submitBtn()}
+              {submit && nextBtn()}
+            </article>
+            <div className="flex items-center">
+              <ArrowRight fill="#6B7280" width="100%" className="" />
+            </div>
+          </div>
+          {showDesc()}
+        </div>
       </div>
     );
   }

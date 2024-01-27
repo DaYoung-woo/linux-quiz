@@ -6,6 +6,7 @@ import {
   query,
   setDoc,
   deleteDoc,
+  getDoc,
 } from "firebase/firestore";
 import { db, storage } from "../utils/firebase";
 import {
@@ -72,4 +73,12 @@ export const quizImgApi = async (id) => {
 // 문제 삭제
 export const deleteQuizAip = async (category, quizNum) => {
   return deleteDoc(doc(db, category, quizNum));
+};
+
+// 문제 상세
+export const quizDetailApi = async (category, quizNum) => {
+  const snapshot = await getDoc(doc(db, category, quizNum));
+  if (snapshot.exists()) {
+    return snapshot.data();
+  } else return {};
 };
