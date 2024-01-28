@@ -4,6 +4,8 @@ import { quizImgApi, quizDetailApi } from "../api/api";
 import { useEffect, useState } from "react";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
 import { ReactComponent as ArrowLeft } from "../assets/img/arrow_left.svg";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function QuizForm() {
   const [photo, setPhoto] = useState(null);
@@ -30,7 +32,7 @@ function QuizForm() {
   };
 
   // 문제 사진 api 요청
-  useQuery({
+  const { data: img } = useQuery({
     queryKey: ["fetchQuizPhoto", category, quizNum],
     queryFn: () => getImg(),
     enabled: !!data?.photo,
@@ -38,11 +40,10 @@ function QuizForm() {
 
   // 이미지 로드 api 응답 처리
   const getImg = async () => {
-    console.log(data.photo);
     try {
       const url = await quizImgApi(data.photo);
       setPhoto(url);
-      return data.photo;
+      return url;
     } catch (e) {
       alert("퀴즈 문제 이미지를 불러오는데 실패했어요");
     }
@@ -136,7 +137,11 @@ function QuizForm() {
               <h3 className="font-medium ">
                 {data.quizNum}. {data.title}
               </h3>
-              {!!photo && <img src={photo} alt="photo" className="w-full" />}
+
+              {!img && data.photo && <Skeleton height="128px" />}
+              {img && data.photo && (
+                <img src={img} alt="photo" className="w-96 h-32" />
+              )}
               <div className="pt-6 pb-1">
                 {distractorBtn(data.distractor1, 1)}
               </div>

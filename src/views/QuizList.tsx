@@ -28,10 +28,10 @@ function QuizList() {
         key={quizNumber}
         to={`/quiz_form?category=${category}&quizNum=${quizNum}`}
       >
-        <div className="border border-slate-200 px-3 py-2 my-1 flex justify-between items-center  bg-white shadow-sm">
-          <div>
+        <div className="border border-slate-200 px-3 py-2 my-1 flex justify-between items-center bg-white shadow-sm">
+          <div className="w-11/12">
             <span className="font-medium text-indigo-500">{quizNumber}번</span>
-            <p className="w-10/12 text-ellipsis overflow-hidden whitespace-nowrap">
+            <p className="w-full text-ellipsis overflow-hidden whitespace-nowrap">
               {title}
             </p>
           </div>
