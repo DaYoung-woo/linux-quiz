@@ -1,19 +1,22 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { quizImgApi, quizDetailApi } from "../api/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
 import { ReactComponent as ArrowLeft } from "../assets/img/arrow_left.svg";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Skeleton from "react-loading-skeleton";
 import Loading from "../components/common/Loading";
+import { useRecoilValue } from "recoil";
+import { quizListAtom } from "../api/recoil";
+
 function QuizForm() {
-  const [photo, setPhoto] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [submit, setSubmit] = useState(false);
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const quizNum = searchParams.get("quizNum");
+  const quizList = useRecoilValue(quizListAtom);
 
   // 문제 조회 api 요청
   const { status, data } = useQuery({
@@ -42,7 +45,6 @@ function QuizForm() {
   const getImg = async () => {
     try {
       const url = await quizImgApi(data.photo);
-      setPhoto(url);
       return url;
     } catch (e) {
       alert("퀴즈 문제 이미지를 불러오는데 실패했어요");
@@ -133,10 +135,19 @@ function QuizForm() {
       return <div className="user-quiz-form">등록된 문제가 없습니다.</div>;
     return (
       <div>
-        <div className="mb-4 mt-8" key={data.title}>
+        <div className="pb-4 pt-8" key={data.title}>
           <div className="user-quiz-form">
-            <div className="flex items-center">
-              <ArrowLeft width="100%" fill="#6B7280" />
+            <div className="flex items-center justify-center">
+              {!!quizList.filter((el) => el[Number(quizNum) - 1]).length && (
+                <Link
+                  to={`/quiz_form?category=${category}&quizNum=${
+                    Number(quizNum) - 1
+                  }`}
+                  replace
+                >
+                  <ArrowLeft width="100%" fill="#6B7280" />
+                </Link>
+              )}
             </div>
             <article>
               <h3 className="font-medium ">
@@ -158,8 +169,17 @@ function QuizForm() {
               {!submit && submitBtn()}
               {submit && nextBtn()}
             </article>
-            <div className="flex items-center">
-              <ArrowRight fill="#6B7280" width="100%" className="" />
+            <div className="flex items-center justify-center">
+              {!!quizList.filter((el) => el[Number(quizNum) + 1]).length && (
+                <Link
+                  to={`/quiz_form?category=${category}&quizNum=${
+                    Number(quizNum) + 1
+                  }`}
+                  replace
+                >
+                  <ArrowRight width="100%" fill="#6B7280" />
+                </Link>
+              )}
             </div>
           </div>
           {showDesc()}

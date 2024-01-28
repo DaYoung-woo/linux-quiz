@@ -48,4 +48,5 @@ export const categoryListAtom = atom({
 export const quizListAtom = atom({
   key: "quizListAtom",
   default: [],
+  effects_UNSTABLE: [persistAtom],
 });
