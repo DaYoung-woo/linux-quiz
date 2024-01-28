@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { quizListApi } from "../api/api";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
-
+import Loading from "../components/common/Loading";
 function QuizList() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
@@ -41,7 +41,12 @@ function QuizList() {
     );
   }
 
-  if (status === "pending") return <div>...loading</div>;
+  if (status === "pending")
+    return (
+      <div className="user-no-list">
+        <Loading />
+      </div>
+    );
 
   if (status === "success") {
     if (!quizList.length)

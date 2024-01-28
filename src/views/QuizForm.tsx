@@ -6,7 +6,7 @@ import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
 import { ReactComponent as ArrowLeft } from "../assets/img/arrow_left.svg";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
+import Loading from "../components/common/Loading";
 function QuizForm() {
   const [photo, setPhoto] = useState(null);
   const [answer, setAnswer] = useState(null);
@@ -121,7 +121,12 @@ function QuizForm() {
       );
   };
 
-  if (status === "pending") return <div>...loading</div>;
+  if (status === "pending")
+    return (
+      <div className="user-no-list">
+        <Loading />
+      </div>
+    );
 
   if (status === "success") {
     if (!data)

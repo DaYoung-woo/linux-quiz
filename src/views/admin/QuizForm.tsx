@@ -9,7 +9,6 @@ import {
 import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import AlertPopup from "../../components/common/AlertPopup";
 import { useQuery } from "@tanstack/react-query";
-
 interface quizObjType {
   category: "";
   quizNum: "";
