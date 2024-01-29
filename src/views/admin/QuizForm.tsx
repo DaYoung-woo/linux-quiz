@@ -104,6 +104,7 @@ function QuizForm() {
       year: formData.category.split("-")[0],
       order: formData.category.split("-")[1],
       photo: "",
+      desc: formData.desc.replace(/\n/g, "<br/>"),
     };
     try {
       // 파일 업로드

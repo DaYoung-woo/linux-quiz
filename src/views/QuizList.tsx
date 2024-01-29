@@ -63,7 +63,7 @@ function QuizList() {
       return <div className="user-no-list">등록된 문제가 없습니다.</div>;
 
     return (
-      <div className="px-4 mt-4">
+      <div className="px-4 my-4">
         <h4 className="py-2 font-semibold ">{renderCategoryHeader()}</h4>
         {quizList.map(renderQuizItem)}
       </div>

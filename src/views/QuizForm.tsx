@@ -114,11 +114,11 @@ function QuizForm() {
     if (!submit) return "";
     else
       return (
-        <div className="my-8 p-4 bg-white mx-10">
+        <div className="my-8 p-4 bg-white mx-10 whitespace-pre-wrap">
           <p className="mb-2 font-medium text-indigo-500">
             정답 {data.answer}번
           </p>
-          {data.desc}
+          {data.desc.replaceAll("<br/>", "\r \n \n")}
         </div>
       );
   };
