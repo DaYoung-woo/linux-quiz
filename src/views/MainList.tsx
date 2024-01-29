@@ -55,7 +55,7 @@ function MainList() {
                         <div>
                           {year}년도 {order}회차
                         </div>
-                        <ArrowRight height="16px" fill="#6366f1" />
+                        <ArrowRight height="12px" width="8px" fill="#6366f1" />
                       </div>
                     </Link>
                   ))}

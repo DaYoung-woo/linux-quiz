@@ -14,9 +14,9 @@ function CategoryList() {
   const [addAlert, setAddAlert] = useState(false);
 
   // 카테고리 리스트 api 요청
-  const { status, data } = useQuery({
+  const { status } = useQuery({
     queryKey: ["fetchCategoryList"],
-    queryFn: () => categoryListApi(),
+    queryFn: () => loadCategoryList(),
   });
 
   // year와 order 변경을 감지해 추가 버튼 diabled 컨트롤
@@ -25,9 +25,11 @@ function CategoryList() {
     else setDisabled(true);
   }, [year, order]);
 
-  useEffect(() => {
-    if (data) setCategoryList(data);
-  }, [data]);
+  const loadCategoryList = async () => {
+    const list = await categoryListApi();
+    setCategoryList(list);
+    return list;
+  };
 
   // 카테고리 추가
   const saveCategory = async () => {
