@@ -1,5 +1,4 @@
 import { atom, selector } from "recoil";
-import { quizListApi } from "./api";
 import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist();
@@ -14,8 +13,6 @@ export const userQuizListSelector = selector({
         .filter((el) => !!el)
         .map((child) => child.filter((test) => !!test)[0]),
     }));
-    console.log(arr);
-
     if (!!quizList) return arr;
     else return [];
   },

@@ -9,13 +9,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { db, storage } from "../utils/firebase";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-  uploadString,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 // 카테고리 리스트
 export const categoryListApi = async () => {
@@ -28,7 +22,6 @@ export const categoryListApi = async () => {
     if (!!snapshot) {
       const list = [];
       snapshot.forEach((doc) => list.push(doc.data()));
-      console.log(list);
       return list;
     } else return [];
   } catch (e) {

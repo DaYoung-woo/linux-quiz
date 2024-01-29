@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 import Header from "../../components/frame/admin/Header";
 import Navi from "../../components/frame/admin/Navi";
@@ -12,16 +11,14 @@ function App() {
   const setUserPhoto = useSetRecoilState(userPhotoAtom);
   const adminId = process.env.REACT_APP_FIREBASE_ADMIN_ACCOUNT;
   const location = useLocation();
-  useEffect(() => {
-    onAuthStateChanged(auth, (userInfo) => {
-      if (userInfo?.email === adminId) {
-        setUserEmail(userInfo?.email);
-        setUserPhoto(userInfo.photoURL);
-      } else {
-        setUserEmail("");
-      }
-    });
-  }, [setUserEmail]);
+  onAuthStateChanged(auth, (userInfo) => {
+    if (userInfo?.email === adminId) {
+      setUserEmail(userInfo?.email);
+      setUserPhoto(userInfo.photoURL);
+    } else {
+      setUserEmail("");
+    }
+  });
 
   return (
     <>

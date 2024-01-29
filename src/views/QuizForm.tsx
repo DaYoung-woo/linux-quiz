@@ -156,7 +156,7 @@ function QuizForm() {
 
               {!img && data.photo && <Skeleton height="128px" />}
               {img && data.photo && (
-                <img src={img} alt="photo" className="w-96 h-32" />
+                <img src={img} alt="quizImg" className="w-96 h-32" />
               )}
               <div className="pt-6 pb-1">
                 {distractorBtn(data.distractor1, 1)}
@@ -177,7 +177,7 @@ function QuizForm() {
                   }`}
                   replace
                 >
-                  <ArrowRight width="100%" fill="#6B7280" />
+                  <ArrowRight height="12px" width="8px" fill="#6B7280" />
                 </Link>
               )}
             </div>
