@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { categoryListApi } from "../api/api";
 import { useRecoilState } from "recoil";
 import { categoryListAtom } from "../api/recoil";
-
+import Loading from "../components/common/Loading";
 function MainList() {
   const [categoryList, setCategoryList] = useRecoilState(categoryListAtom);
 
@@ -31,12 +31,12 @@ function MainList() {
   return (
     <div className="px-4 mt-2">
       {status === "pending" && (
-        <div className="text-center mt-36">...loading</div>
+        <div className="user-no-list">
+          <Loading />
+        </div>
       )}
       {status === "error" && (
-        <div className="text-center mt-36">
-          데이터를 가져오는데 실패했어요😭
-        </div>
+        <div className="user-no-list">데이터를 가져오는데 실패했어요😭</div>
       )}
       {status === "success" && (
         <div className="quiz-list pt-4">

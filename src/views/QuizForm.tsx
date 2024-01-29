@@ -1,17 +1,22 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { quizImgApi, quizDetailApi } from "../api/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
 import { ReactComponent as ArrowLeft } from "../assets/img/arrow_left.svg";
+import "react-loading-skeleton/dist/skeleton.css";
+import Skeleton from "react-loading-skeleton";
+import Loading from "../components/common/Loading";
+import { useRecoilValue } from "recoil";
+import { quizListAtom } from "../api/recoil";
 
 function QuizForm() {
-  const [photo, setPhoto] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [submit, setSubmit] = useState(false);
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const quizNum = searchParams.get("quizNum");
+  const quizList = useRecoilValue(quizListAtom);
 
   // 문제 조회 api 요청
   const { status, data } = useQuery({
@@ -30,7 +35,7 @@ function QuizForm() {
   };
 
   // 문제 사진 api 요청
-  useQuery({
+  const { data: img } = useQuery({
     queryKey: ["fetchQuizPhoto", category, quizNum],
     queryFn: () => getImg(),
     enabled: !!data?.photo,
@@ -38,11 +43,9 @@ function QuizForm() {
 
   // 이미지 로드 api 응답 처리
   const getImg = async () => {
-    console.log(data.photo);
     try {
       const url = await quizImgApi(data.photo);
-      setPhoto(url);
-      return data.photo;
+      return url;
     } catch (e) {
       alert("퀴즈 문제 이미지를 불러오는데 실패했어요");
     }
@@ -111,32 +114,50 @@ function QuizForm() {
     if (!submit) return "";
     else
       return (
-        <div className="my-8 p-4 bg-white mx-10">
+        <div className="my-8 p-4 bg-white mx-10 whitespace-pre-wrap">
           <p className="mb-2 font-medium text-indigo-500">
             정답 {data.answer}번
           </p>
-          {data.desc}
+          {data.desc.replaceAll("<br/>", "\r \n \n")}
         </div>
       );
   };
 
-  if (status === "pending") return <div>...loading</div>;
+  if (status === "pending")
+    return (
+      <div className="user-no-list">
+        <Loading />
+      </div>
+    );
 
   if (status === "success") {
     if (!data)
       return <div className="user-quiz-form">등록된 문제가 없습니다.</div>;
     return (
       <div>
-        <div className="mb-4 mt-8" key={data.title}>
+        <div className="pb-4 pt-8" key={data.title}>
           <div className="user-quiz-form">
-            <div className="flex items-center">
-              <ArrowLeft width="100%" fill="#6B7280" />
+            <div className="flex items-center justify-center">
+              {!!quizList.filter((el) => el[Number(quizNum) - 1]).length && (
+                <Link
+                  to={`/quiz_form?category=${category}&quizNum=${
+                    Number(quizNum) - 1
+                  }`}
+                  replace
+                >
+                  <ArrowLeft width="100%" fill="#6B7280" />
+                </Link>
+              )}
             </div>
             <article>
               <h3 className="font-medium ">
                 {data.quizNum}. {data.title}
               </h3>
-              {!!photo && <img src={photo} alt="photo" className="w-full" />}
+
+              {!img && data.photo && <Skeleton height="128px" />}
+              {img && data.photo && (
+                <img src={img} alt="photo" className="w-96 h-32" />
+              )}
               <div className="pt-6 pb-1">
                 {distractorBtn(data.distractor1, 1)}
               </div>
@@ -148,8 +169,17 @@ function QuizForm() {
               {!submit && submitBtn()}
               {submit && nextBtn()}
             </article>
-            <div className="flex items-center">
-              <ArrowRight fill="#6B7280" width="100%" className="" />
+            <div className="flex items-center justify-center">
+              {!!quizList.filter((el) => el[Number(quizNum) + 1]).length && (
+                <Link
+                  to={`/quiz_form?category=${category}&quizNum=${
+                    Number(quizNum) + 1
+                  }`}
+                  replace
+                >
+                  <ArrowRight width="100%" fill="#6B7280" />
+                </Link>
+              )}
             </div>
           </div>
           {showDesc()}

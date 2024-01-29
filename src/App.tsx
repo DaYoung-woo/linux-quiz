@@ -25,10 +25,12 @@ function App() {
           </div>
         )}
         {show && (
-          <>
+          <div>
             <Header clickIcon={clickIcon} />
-            <Outlet />
-          </>
+            <div className="app-body">
+              <Outlet />
+            </div>
+          </div>
         )}
       </ThemeContext.Provider>
     </div>

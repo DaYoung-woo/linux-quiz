@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   quizSaveApi,
@@ -9,18 +9,6 @@ import {
 import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import AlertPopup from "../../components/common/AlertPopup";
 import { useQuery } from "@tanstack/react-query";
-
-interface quizObjType {
-  category: "";
-  quizNum: "";
-  title: "";
-  distractor1: "";
-  distractor2: "";
-  distractor3: "";
-  distractor4: "";
-  desc: "";
-  answer: "";
-}
 
 function QuizForm() {
   // 기본 객체
@@ -35,8 +23,10 @@ function QuizForm() {
     desc: "",
     answer: "",
   };
+
   // 문제 번호 생성
   const quizNums = Array.from({ length: 100 }, (_, index) => index + 1);
+
   // url 파라미터
   const [searchParams] = useSearchParams();
 
@@ -48,7 +38,6 @@ function QuizForm() {
   const [photo, setPhoto] = useState(null);
   const navigation = useNavigate();
   const category = searchParams.get("category");
-  const quizNum = searchParams.get("quizNum");
   let initialQuiz = true;
 
   // 카테고리 리스트 api 요청
@@ -68,10 +57,6 @@ function QuizForm() {
   const loadQuiz = async () => {
     try {
       const list = await quizListApi(category);
-      const quiz = list.filter((el) => Object.keys(el)[0] === quizNum);
-      const quizCopy = { ...defaultQuiz };
-      // Object.keys(defaultQuiz).forEach((el) => (quizCopy[el] = quiz[el]));
-      // setFormData(quizCopy);
       return list;
     } catch (e) {
       alert("퀴즈 상세 api 조회에 실패했어요😭");
@@ -119,6 +104,7 @@ function QuizForm() {
       year: formData.category.split("-")[0],
       order: formData.category.split("-")[1],
       photo: "",
+      desc: formData.desc.replace(/\n/g, "<br/>"),
     };
     try {
       // 파일 업로드

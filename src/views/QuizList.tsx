@@ -2,17 +2,27 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { quizListApi } from "../api/api";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
+import { quizListAtom } from "../api/recoil";
 
+import Loading from "../components/common/Loading";
+import { useRecoilState } from "recoil";
 function QuizList() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
+  const [quizList, setQuizList] = useRecoilState(quizListAtom);
 
   // 문제 조회 api 요청
-  const { status, data: quizList } = useQuery({
+  const { status } = useQuery({
     queryKey: ["fetchQuizList", category],
-    queryFn: () => quizListApi(category),
+    queryFn: () => loadQuizList(),
     enabled: !!category,
   });
+
+  const loadQuizList = async () => {
+    const list = await quizListApi(category);
+    setQuizList(list);
+    return list;
+  };
 
   function renderCategoryHeader() {
     const [year, round] = category.split("-");
@@ -28,10 +38,10 @@ function QuizList() {
         key={quizNumber}
         to={`/quiz_form?category=${category}&quizNum=${quizNum}`}
       >
-        <div className="border border-slate-200 px-3 py-2 my-1 flex justify-between items-center  bg-white shadow-sm">
-          <div>
+        <div className="border border-slate-200 px-3 py-2 my-1 flex justify-between items-center bg-white shadow-sm">
+          <div className="w-11/12">
             <span className="font-medium text-indigo-500">{quizNumber}번</span>
-            <p className="w-10/12 text-ellipsis overflow-hidden whitespace-nowrap">
+            <p className="w-full text-ellipsis overflow-hidden whitespace-nowrap">
               {title}
             </p>
           </div>
@@ -41,14 +51,19 @@ function QuizList() {
     );
   }
 
-  if (status === "pending") return <div>...loading</div>;
+  if (status === "pending")
+    return (
+      <div className="user-no-list">
+        <Loading />
+      </div>
+    );
 
   if (status === "success") {
     if (!quizList.length)
       return <div className="user-no-list">등록된 문제가 없습니다.</div>;
 
     return (
-      <div className="px-4 mt-4">
+      <div className="px-4 my-4">
         <h4 className="py-2 font-semibold ">{renderCategoryHeader()}</h4>
         {quizList.map(renderQuizItem)}
       </div>
