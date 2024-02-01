@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   quizSaveApi,
   categoryListApi,
   imgSave,
-  quizListApi,
+  quizDetailApi,
 } from "../../api/api";
 import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import AlertPopup from "../../components/common/AlertPopup";
@@ -38,7 +38,7 @@ function QuizForm() {
   const [photo, setPhoto] = useState(null);
   const navigation = useNavigate();
   const category = searchParams.get("category");
-  let initialQuiz = true;
+  const quizNum = searchParams.get("quizNum");
 
   // 카테고리 리스트 api 요청
   const { status, data } = useQuery({
@@ -47,21 +47,17 @@ function QuizForm() {
   });
 
   // 문제 조회 api 요청
-  useQuery({
-    queryKey: ["fetchQuizList", category],
-    queryFn: () => loadQuiz(),
-    enabled: !!category && initialQuiz,
+  const { data: quizData } = useQuery({
+    queryKey: ["fetchQuiz", category, quizNum],
+    queryFn: () => quizDetailApi(category, quizNum),
+    enabled: !!category && !!quizNum,
   });
 
   // 문제 조회 후 formData 세팅
-  const loadQuiz = async () => {
-    try {
-      const list = await quizListApi(category);
-      return list;
-    } catch (e) {
-      alert("퀴즈 상세 api 조회에 실패했어요😭");
-    }
-  };
+  useEffect(() => {
+    if (!!quizData && !!quizData[quizNum])
+      setFormData({ ...quizData[quizNum] });
+  }, [quizData, quizNum]);
 
   // 모달 닫고 메인 화면 이동
   const closeAddAlert = () => {

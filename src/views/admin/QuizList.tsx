@@ -30,14 +30,17 @@ function Quiz() {
   };
 
   // 퀴즈 삭제
-  const deleteQuiz = async (e, quizNum) => {
+  const deleteQuizConfirm = async (e, quizNum) => {
     e.stopPropagation();
-    try {
-      await deleteQuizAip(category, quizNum);
-      setDeleteAlert(true);
-      setTimeout(() => closeDeleteAlert(), 2000);
-    } catch (e) {
-      alert("퀴즈 삭제에 오류가 발생했어요😭");
+    const answer = window.confirm("삭제하시겠습니까?");
+    if (answer) {
+      try {
+        await deleteQuizAip(category, quizNum);
+        setDeleteAlert(true);
+        setTimeout(() => closeDeleteAlert(), 2000);
+      } catch (e) {
+        alert("퀴즈 삭제에 오류가 발생했어요😭");
+      }
     }
   };
 
@@ -88,7 +91,7 @@ function Quiz() {
         {quizStatus === "success" &&
           quizList.map((el) => (
             <li
-              className="bg  hover:bg-slate-50"
+              className="bg hover:bg-slate-50 cursor-pointer"
               key={Object.keys(el)[0]}
               onClick={() => movaPage(Object.keys(el)[0])}
             >
@@ -107,7 +110,7 @@ function Quiz() {
                 className="mr-2"
                 height="16px"
                 fill="#6B7280"
-                onClick={(e) => deleteQuiz(e, Object.keys(el)[0])}
+                onClick={(e) => deleteQuizConfirm(e, Object.keys(el)[0])}
               />
             </li>
           ))}
