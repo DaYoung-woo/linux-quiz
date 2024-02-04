@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { quizImgApi, quizDetailApi } from "../api/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
 import { ReactComponent as ArrowLeft } from "../assets/img/arrow_left.svg";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -123,6 +123,13 @@ function QuizForm() {
       );
   };
 
+
+  useEffect(()=> {
+    setSubmit(false)
+    setAnswer(null)
+  },[quizNum, category])
+
+  // 로딩중 
   if (status === "pending")
     return (
       <div className="user-no-list">
