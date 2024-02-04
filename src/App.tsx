@@ -5,8 +5,6 @@ import Header from "./components/frame/Header";
 import { ThemeContext } from "./context/ThemeContext";
 
 function App() {
-  const [show, setShow] = useState(false);
-  setTimeout(() => setShow(true), 2000);
 
   const darkMode = localStorage.getItem("theme") || "light";
   const [theme, setTheme] = useState(darkMode);
@@ -19,19 +17,12 @@ function App() {
   return (
     <div className={`App ${theme}`}>
       <ThemeContext.Provider value={theme}>
-        {!show && (
-          <div className="app-cover">
-            <img src={logo} alt="logo" />
+        <div>
+          <Header clickIcon={clickIcon} />
+          <div className="app-body">
+            <Outlet />
           </div>
-        )}
-        {show && (
-          <div>
-            <Header clickIcon={clickIcon} />
-            <div className="app-body">
-              <Outlet />
-            </div>
-          </div>
-        )}
+        </div>
       </ThemeContext.Provider>
     </div>
   );
