@@ -157,7 +157,7 @@ function QuizForm() {
               )}
             </div>
             <article>
-              <h3 className="font-medium ">
+              <h3 className="font-medium mb-2">
                 {data.quizNum}. {data.title}
               </h3>
 
