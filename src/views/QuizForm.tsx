@@ -98,7 +98,10 @@ function QuizForm() {
   // Next 버튼
   const nextBtn = () => {
     return (
-      <Link to="">
+      <Link
+        to={`/quiz_form?category=${category}&quizNum=${Number(quizNum) + 1}`}
+        replace
+      >
         <button
           disabled={!answer}
           className="w-full text-center py-2 bg-indigo-500 border rounded-md text-slate-50"
@@ -123,13 +126,12 @@ function QuizForm() {
       );
   };
 
+  useEffect(() => {
+    setSubmit(false);
+    setAnswer(null);
+  }, [quizNum, category]);
 
-  useEffect(()=> {
-    setSubmit(false)
-    setAnswer(null)
-  },[quizNum, category])
-
-  // 로딩중 
+  // 로딩중
   if (status === "pending")
     return (
       <div className="user-no-list">
