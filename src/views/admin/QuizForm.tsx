@@ -25,7 +25,9 @@ function QuizForm() {
   };
 
   // 문제 번호 생성
-  const quizNums = Array.from({ length: 100 }, (_, index) => index + 1);
+  const quizNums = Array.from({ length: 80 }, (_, index) =>
+    String(index + 1).length === 1 ? `0${String(index + 1)}` : String(index + 1)
+  );
 
   // url 파라미터
   const [searchParams] = useSearchParams();
