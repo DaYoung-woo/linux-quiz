@@ -25,7 +25,9 @@ function QuizForm() {
   };
 
   // 문제 번호 생성
-  const quizNums = Array.from({ length: 100 }, (_, index) => index + 1);
+  const quizNums = Array.from({ length: 80 }, (_, index) =>
+    String(index + 1).length === 1 ? `0${String(index + 1)}` : String(index + 1)
+  );
 
   // url 파라미터
   const [searchParams] = useSearchParams();
@@ -57,6 +59,7 @@ function QuizForm() {
   useEffect(() => {
     if (!!quizData && !!quizData[quizNum])
       setFormData({ ...quizData[quizNum] });
+    setDisabled(false);
   }, [quizData, quizNum]);
 
   // 모달 닫고 메인 화면 이동
@@ -125,6 +128,7 @@ function QuizForm() {
       ...formData,
       [name]: value,
     };
+    console.log(newFormData);
     setFormData(newFormData);
 
     const valid = Object.keys(newFormData)
