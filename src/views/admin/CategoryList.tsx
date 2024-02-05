@@ -3,20 +3,20 @@ import { ReactComponent as Plus } from "../../assets/img/plus.svg";
 import { ReactComponent as Trashbin } from "../../assets/img/trashbin.svg";
 import { useQuery } from "@tanstack/react-query";
 import { categoryListApi, categorySaveApi } from "../../api/api";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { categoryListAtom } from "../../api/recoil";
 import AlertPopup from "../../components/common/AlertPopup";
 function CategoryList() {
   const [btnDisabled, setDisabled] = useState(true);
   const [year, setYear] = useState("");
   const [order, setOrder] = useState("");
-  const [categoryList, setCategoryList] = useRecoilState(categoryListAtom);
+  const setCategoryList = useSetRecoilState(categoryListAtom);
   const [addAlert, setAddAlert] = useState(false);
 
   // 카테고리 리스트 api 요청
-  const { status } = useQuery({
+  const { status, data: categoryList } = useQuery({
     queryKey: ["fetchCategoryList"],
-    queryFn: () => loadCategoryList(),
+    queryFn: () => categoryListApi(),
   });
 
   // year와 order 변경을 감지해 추가 버튼 diabled 컨트롤
@@ -24,12 +24,6 @@ function CategoryList() {
     if (!!year && !!order) setDisabled(false);
     else setDisabled(true);
   }, [year, order]);
-
-  const loadCategoryList = async () => {
-    const list = await categoryListApi();
-    setCategoryList(list);
-    return list;
-  };
 
   // 카테고리 추가
   const saveCategory = async () => {
