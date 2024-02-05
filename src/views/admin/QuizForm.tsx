@@ -57,9 +57,10 @@ function QuizForm() {
 
   // 문제 조회 후 formData 세팅
   useEffect(() => {
-    if (!!quizData && !!quizData[quizNum])
+    if (!!quizData && !!quizData[quizNum]) {
       setFormData({ ...quizData[quizNum] });
-    setDisabled(false);
+      setDisabled(false);
+    }
   }, [quizData, quizNum]);
 
   // 모달 닫고 메인 화면 이동
@@ -132,7 +133,7 @@ function QuizForm() {
     setFormData(newFormData);
 
     const valid = Object.keys(newFormData)
-      .filter((el) => el !== "id")
+      .filter((el) => el !== "id" && el !== "photo")
       .find((el) => !newFormData[el]);
     setDisabled(!!valid);
   };
