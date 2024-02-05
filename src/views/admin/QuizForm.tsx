@@ -59,6 +59,7 @@ function QuizForm() {
   useEffect(() => {
     if (!!quizData && !!quizData[quizNum])
       setFormData({ ...quizData[quizNum] });
+    setDisabled(false);
   }, [quizData, quizNum]);
 
   // 모달 닫고 메인 화면 이동
@@ -127,6 +128,7 @@ function QuizForm() {
       ...formData,
       [name]: value,
     };
+    console.log(newFormData);
     setFormData(newFormData);
 
     const valid = Object.keys(newFormData)
