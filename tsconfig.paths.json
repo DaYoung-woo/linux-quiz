@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "@apis/*": ["apis/*"],
+      "@api/*": ["api/*"],
       "@assets/*": ["assets/*"],
       "@atoms/*": ["components/atoms/*"],
       "@blocks/*": ["components/blocks/*"],
@@ -10,7 +10,8 @@
       "@hooks/*": ["hooks/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@context/*": ["context/*"]
     }
   }
 }
