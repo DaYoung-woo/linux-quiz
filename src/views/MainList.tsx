@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { categoryListApi } from "../api/api";
 import Loading from "../components/common/Loading";
+import logo from "../assets/img/logo.svg";
+
 function MainList() {
   // 카테고리 리스트 api 요청
   const { status, data: categoryList } = useQuery({
@@ -10,6 +12,31 @@ function MainList() {
     queryFn: () => categoryListApi(),
     retry: false,
   });
+
+  // 카테고리가 없는 경우
+  function noCategory() {
+    return (
+      <div className="text-center mt-36 user-quiz-form">
+        등록된 데이터가 없습니다
+      </div>
+    );
+  }
+
+  // 년도별 회차 리스트
+  function yearAndOrderList(el) {
+    return categoryList
+      .filter((quiz) => quiz.year === el)
+      .map(({ id, year, order }) => (
+        <Link to={`/quiz_list?category=${id}`} key={`year${year}order${order}`}>
+          <div className="flex px-4 py-2 items-center mt-1 justify-between bg-indigo-50 ">
+            <div>
+              {year}년도 {order}회차
+            </div>
+            <ArrowRight height="12px" width="8px" fill="#6366f1" />
+          </div>
+        </Link>
+      ));
+  }
 
   return (
     <div className="px-4 mt-2">
@@ -28,34 +55,25 @@ function MainList() {
       {/* api 요청 성공 */}
       {status === "success" && (
         <div className="quiz-list pt-4">
-          {!!categoryList &&
-            [...new Set(categoryList.map((el) => el.year))].map((el) => (
-              <div key={el} className="mb-8 shadow-sm bg-white p-4 ">
-                <h4 className="mb-4 font-semibold ">{el}년도</h4>
-                {categoryList
-                  .filter((quiz) => quiz.year === el)
-                  .map(({ id, year, order }) => (
-                    <Link
-                      to={`/quiz_list?category=${id}`}
-                      key={`year${year}order${order}`}
-                    >
-                      <div className="flex px-4 py-2 items-center mt-1 justify-between bg-indigo-50 ">
-                        <div>
-                          {year}년도 {order}회차
-                        </div>
-                        <ArrowRight height="12px" width="8px" fill="#6366f1" />
-                      </div>
-                    </Link>
-                  ))}
-              </div>
-            ))}
-          {!categoryList.length && (
-            <div className="text-center mt-36 user-quiz-form">
-              등록된 데이터가 없습니다
-            </div>
-          )}
+          {categoryList.length
+            ? [...new Set(categoryList.map((el) => el.year))].map((el) => (
+                <div key={el} className="mb-8 shadow-sm bg-white p-4 ">
+                  <h4 className="mb-4 font-semibold ">{el}년도</h4>
+                  {yearAndOrderList(el)}
+                </div>
+              ))
+            : noCategory()}
         </div>
       )}
+
+      {/* 스플래쉬 */}
+      <div className={status === "pending" && "app-cover"}>
+        <img
+          src={logo}
+          alt="logo"
+          className={status === "success" && "hidden"}
+        />
+      </div>
     </div>
   );
 }
