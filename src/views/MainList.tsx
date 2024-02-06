@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { categoryListApi } from "../api/api";
 import Loading from "../components/common/Loading";
-import logo from "../assets/img/logo.svg";
 
 function MainList() {
   // 카테고리 리스트 api 요청
@@ -65,15 +64,6 @@ function MainList() {
             : noCategory()}
         </div>
       )}
-
-      {/* 스플래쉬 */}
-      <div className={status === "pending" && "app-cover"}>
-        <img
-          src={logo}
-          alt="logo"
-          className={status === "success" && "hidden"}
-        />
-      </div>
     </div>
   );
 }
