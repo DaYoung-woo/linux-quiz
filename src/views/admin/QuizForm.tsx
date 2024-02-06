@@ -31,16 +31,19 @@ function QuizForm() {
 
   // url 파라미터
   const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
+  const quizNum = searchParams.get("quizNum");
 
+  // 네비게이션
+  const navigation = useNavigate();
+
+  // 변수
   const [addAlert, setAddAlert] = useState(false);
   const [formData, setFormData] = useState({ ...defaultQuiz });
   const [btnDisabled, setDisabled] = useState(true);
   const [attachment, setAttachment] = useState(null);
   const [attachmentName, setAttachmentName] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const navigation = useNavigate();
-  const category = searchParams.get("category");
-  const quizNum = searchParams.get("quizNum");
 
   // 카테고리 리스트 api 요청
   const { status, data } = useQuery({
@@ -112,11 +115,14 @@ function QuizForm() {
         await imgSave(attachmentName, photo);
         param.photo = attachmentName;
       }
+
+      // 퀴즈 추가
       await quizSaveApi(param);
+
+      // 퀴즈 추가 알림창 오픈
       setAddAlert(true);
       setTimeout(() => closeAddAlert(), 2000);
     } catch (e) {
-      console.log(e);
       alert("퀴즈 파일 업로드에 문제가 발생했어요😭");
     }
   };
@@ -129,7 +135,6 @@ function QuizForm() {
       ...formData,
       [name]: value,
     };
-    console.log(newFormData);
     setFormData(newFormData);
 
     const valid = Object.keys(newFormData)
