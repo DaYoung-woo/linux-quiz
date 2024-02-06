@@ -17,6 +17,17 @@ function QuizForm() {
   const category = searchParams.get("category");
   const quizNum = searchParams.get("quizNum");
   const quizList = useRecoilValue(quizListAtom);
+  const nextNum = Number(quizNum) + 1;
+  const nextQuizNum =
+    String(nextNum).length === 1 ? String(`0${nextNum}`) : nextNum;
+  const prevNum = Number(quizNum) - 1;
+  const prevQuizNum =
+    String(prevNum).length === 1 ? String(`0${prevNum}`) : prevNum;
+
+  useEffect(() => {
+    setSubmit(false);
+    setAnswer(null);
+  }, [quizNum, category]);
 
   // 문제 조회 api 요청
   const { status, data } = useQuery({
@@ -83,7 +94,7 @@ function QuizForm() {
   };
 
   // submit 버튼
-  const submitBtn = () => {
+  const submitFullBtn = () => {
     return (
       <button
         disabled={!answer}
@@ -96,15 +107,17 @@ function QuizForm() {
   };
 
   // Next 버튼
-  const nextBtn = () => {
+  const nextFullBtn = () => {
+    const isExistNext = quizList.filter((el) => el[nextQuizNum]).length;
+    if (!isExistNext) return;
     return (
       <Link
-        to={`/quiz_form?category=${category}&quizNum=${Number(quizNum) + 1}`}
+        to={`/quiz_form?category=${category}&quizNum=${nextQuizNum}`}
         replace
       >
         <button
           disabled={!answer}
-          className="w-full text-center py-2 bg-indigo-500 border rounded-md text-slate-50"
+          className="w-full text-center py-2 bg-indigo-500 border rounded-md text-slate-50 disabled:bg-slate-200 disabled:text-slate-400"
         >
           NEXT
         </button>
@@ -126,10 +139,31 @@ function QuizForm() {
       );
   };
 
-  useEffect(() => {
-    setSubmit(false);
-    setAnswer(null);
-  }, [quizNum, category]);
+  // < 이전 문제 버튼
+  const prevBtn = () => {
+    if (!quizList.filter((el) => el[prevQuizNum]).length) return;
+    return (
+      <Link
+        to={`/quiz_form?category=${category}&quizNum=${prevQuizNum}`}
+        replace
+      >
+        <ArrowLeft width="100%" fill="#6B7280" />
+      </Link>
+    );
+  };
+
+  // > 다음 문제 버튼
+  const nextBtn = () => {
+    if (!quizList.filter((el) => el[nextQuizNum]).length) return;
+    return (
+      <Link
+        to={`/quiz_form?category=${category}&quizNum=${nextQuizNum}`}
+        replace
+      >
+        <ArrowRight height="12px" width="8px" fill="#6B7280" />
+      </Link>
+    );
+  };
 
   // 로딩중
   if (status === "pending")
@@ -146,18 +180,7 @@ function QuizForm() {
       <div>
         <div className="pb-4 pt-8" key={data.title}>
           <div className="user-quiz-form">
-            <div className="flex items-center justify-center">
-              {!!quizList.filter((el) => el[Number(quizNum) - 1]).length && (
-                <Link
-                  to={`/quiz_form?category=${category}&quizNum=${
-                    Number(quizNum) - 1
-                  }`}
-                  replace
-                >
-                  <ArrowLeft width="100%" fill="#6B7280" />
-                </Link>
-              )}
-            </div>
+            <div className="flex items-center justify-center">{prevBtn()}</div>
             <article>
               <h3 className="font-medium mb-2">
                 {data.quizNum}. {data.title}
@@ -175,21 +198,10 @@ function QuizForm() {
               <div className="pb-1 mb-5">
                 {distractorBtn(data.distractor4, 4)}
               </div>
-              {!submit && submitBtn()}
-              {submit && nextBtn()}
+              {!submit && submitFullBtn()}
+              {submit && nextFullBtn()}
             </article>
-            <div className="flex items-center justify-center">
-              {!!quizList.filter((el) => el[Number(quizNum) + 1]).length && (
-                <Link
-                  to={`/quiz_form?category=${category}&quizNum=${
-                    Number(quizNum) + 1
-                  }`}
-                  replace
-                >
-                  <ArrowRight height="12px" width="8px" fill="#6B7280" />
-                </Link>
-              )}
-            </div>
+            <div className="flex items-center justify-center">{nextBtn()}</div>
           </div>
           {showDesc()}
         </div>
