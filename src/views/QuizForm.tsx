@@ -20,9 +20,6 @@ function QuizForm() {
   const nextNum = Number(quizNum) + 1;
   const nextQuizNum =
     String(nextNum).length === 1 ? String(`0${nextNum}`) : nextNum;
-  const prevNum = Number(quizNum) - 1;
-  const prevQuizNum =
-    String(prevNum).length === 1 ? String(`0${prevNum}`) : prevNum;
 
   useEffect(() => {
     setSubmit(false);
@@ -140,7 +137,11 @@ function QuizForm() {
   };
 
   // < 이전 문제 버튼
-  const prevBtn = () => {
+  function prevBtn() {
+    const prevNum = Number(quizNum) - 1;
+    const prevQuizNum =
+      String(prevNum).length === 1 ? String(`0${prevNum}`) : prevNum;
+    console.log(quizList.filter((el) => el[prevQuizNum]));
     if (!quizList.filter((el) => el[prevQuizNum]).length) return;
     return (
       <Link
@@ -150,10 +151,11 @@ function QuizForm() {
         <ArrowLeft width="100%" fill="#6B7280" />
       </Link>
     );
-  };
+  }
 
   // > 다음 문제 버튼
   const nextBtn = () => {
+    console.log(quizList.filter((el) => el[nextQuizNum]));
     if (!quizList.filter((el) => el[nextQuizNum]).length) return;
     return (
       <Link
