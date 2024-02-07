@@ -141,6 +141,7 @@ function QuizForm() {
     const prevNum = Number(quizNum) - 1;
     const prevQuizNum =
       String(prevNum).length === 1 ? String(`0${prevNum}`) : prevNum;
+    console.log(quizList.filter((el) => el[prevQuizNum]));
     if (!quizList.filter((el) => el[prevQuizNum]).length) return;
     return (
       <Link
@@ -154,6 +155,7 @@ function QuizForm() {
 
   // > 다음 문제 버튼
   const nextBtn = () => {
+    console.log(quizList.filter((el) => el[nextQuizNum]));
     if (!quizList.filter((el) => el[nextQuizNum]).length) return;
     return (
       <Link
