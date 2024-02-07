@@ -20,9 +20,6 @@ function QuizForm() {
   const nextNum = Number(quizNum) + 1;
   const nextQuizNum =
     String(nextNum).length === 1 ? String(`0${nextNum}`) : nextNum;
-  const prevNum = Number(quizNum) - 1;
-  const prevQuizNum =
-    String(prevNum).length === 1 ? String(`0${prevNum}`) : prevNum;
 
   useEffect(() => {
     setSubmit(false);
@@ -141,8 +138,9 @@ function QuizForm() {
 
   // < 이전 문제 버튼
   function prevBtn() {
-    console.log(quizList.filter((el) => el[prevQuizNum]));
-    console.log(!quizList.filter((el) => el[prevQuizNum]).length);
+    const prevNum = Number(quizNum) - 1;
+    const prevQuizNum =
+      String(prevNum).length === 1 ? String(`0${prevNum}`) : prevNum;
     if (!quizList.filter((el) => el[prevQuizNum]).length) return;
     return (
       <Link
