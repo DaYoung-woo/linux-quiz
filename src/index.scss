@@ -196,7 +196,7 @@ ul.quiz-list {
 }
 
 .app-body {
-  height: 100vh;
+  height: calc(100vh - 55px);
   overflow: hidden;
   overflow-y: scroll;
 }
