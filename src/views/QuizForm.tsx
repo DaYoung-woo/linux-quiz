@@ -13,9 +13,11 @@ import { quizListAtom } from "../api/recoil";
 function QuizForm() {
   const [answer, setAnswer] = useState(null);
   const [submit, setSubmit] = useState(false);
+
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const quizNum = searchParams.get("quizNum");
+
   const quizList = useRecoilValue(quizListAtom);
   const nextNum = Number(quizNum) + 1;
   const nextQuizNum =
@@ -141,7 +143,6 @@ function QuizForm() {
     const prevNum = Number(quizNum) - 1;
     const prevQuizNum =
       String(prevNum).length === 1 ? String(`0${prevNum}`) : prevNum;
-    console.log(quizList.filter((el) => el[prevQuizNum]));
     if (!quizList.filter((el) => el[prevQuizNum]).length) return;
     return (
       <Link

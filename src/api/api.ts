@@ -11,7 +11,6 @@ import {
 import { db, storage } from "../utils/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
-
 // 카테고리 리스트
 export const categoryListApi = async () => {
   const docQuery = query(
