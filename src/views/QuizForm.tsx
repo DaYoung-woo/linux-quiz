@@ -140,7 +140,7 @@ function QuizForm() {
   };
 
   // < 이전 문제 버튼
-  const prevBtn = () => {
+  function prevBtn() {
     if (!quizList.filter((el) => el[prevQuizNum]).length) return;
     return (
       <Link
@@ -150,7 +150,7 @@ function QuizForm() {
         <ArrowLeft width="100%" fill="#6B7280" />
       </Link>
     );
-  };
+  }
 
   // > 다음 문제 버튼
   const nextBtn = () => {
