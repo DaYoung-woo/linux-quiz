@@ -141,6 +141,8 @@ function QuizForm() {
 
   // < 이전 문제 버튼
   function prevBtn() {
+    console.log(quizList.filter((el) => el[prevQuizNum]));
+    console.log(!quizList.filter((el) => el[prevQuizNum]).length);
     if (!quizList.filter((el) => el[prevQuizNum]).length) return;
     return (
       <Link
