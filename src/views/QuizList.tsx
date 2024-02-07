@@ -4,16 +4,26 @@ import { quizListApi } from "../api/api";
 import { ReactComponent as ArrowRight } from "../assets/img/arrow_right.svg";
 
 import Loading from "../components/common/Loading";
+import { useSetRecoilState } from "recoil";
+import { quizListAtom } from "../api/recoil";
 function QuizList() {
+  //url param
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
+  const setQuizList = useSetRecoilState(quizListAtom);
 
   // 문제 조회 api 요청
   const { status, data: quizList } = useQuery({
     queryKey: ["fetchQuizList", category],
-    queryFn: () => quizListApi(category),
+    queryFn: () => getQuizList(),
     enabled: !!category,
   });
+
+  async function getQuizList() {
+    const res = await quizListApi(category);
+    setQuizList(res);
+    return res;
+  }
 
   function renderCategoryHeader() {
     const [year, round] = category.split("-");
