@@ -61,7 +61,10 @@ function QuizForm() {
   // 문제 조회 후 formData 세팅
   useEffect(() => {
     if (!!quizData && !!quizData[quizNum]) {
-      setFormData({ ...quizData[quizNum] });
+      setFormData({
+        ...quizData[quizNum],
+        desc: quizData[quizNum].desc.replaceAll("<br/>", "\r"),
+      });
       setDisabled(false);
     }
   }, [quizData, quizNum]);
