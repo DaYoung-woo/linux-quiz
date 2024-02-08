@@ -12,7 +12,7 @@ import { db, storage } from "../utils/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 // 카테고리 리스트
-export const categoryListApi = async () => {
+export const categoryListApi = async (): Promise<categoryType[]> => {
   const docQuery = query(
     collection(db, "category_list"),
     orderBy("year", "desc")
@@ -20,22 +20,28 @@ export const categoryListApi = async () => {
   try {
     const snapshot = await getDocs(docQuery);
     if (!!snapshot) {
-      const list = [];
-      snapshot.forEach((doc) => list.push(doc.data()));
+      const list: categoryType[] = [];
+      snapshot.forEach((doc) => {
+        const category = doc.data() as categoryType;
+        list.push(category);
+      });
       return list;
-    } else return [];
+    } else {
+      return [];
+    }
   } catch (e) {
     console.log(e);
+    return [];
   }
 };
 
 // 카테고리 저장
-export const categorySaveApi = (param) => {
+export const categorySaveApi = (param: categoryType): Promise<void> => {
   return setDoc(doc(db, "category_list", param.id), param);
 };
 
 // 문제 이미지 저장
-export const imgSave = (name, attachment) => {
+export const imgSave = (name: string, attachment) => {
   const fileRef = ref(storage, `images/${name}`); // 파일 참조 생성
   return uploadBytesResumable(fileRef, attachment);
 };

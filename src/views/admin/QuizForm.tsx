@@ -74,8 +74,8 @@ function QuizForm() {
 
   const getFile = (e) => {
     // 업로드 된 file
-    const files = e.target.files;
-    const theFile = files[0];
+    const files: File[] = e.target.files;
+    const theFile: File = files[0];
 
     setAttachmentName(theFile.name);
     // FileReader 생성
@@ -101,7 +101,7 @@ function QuizForm() {
   // 저장 api 요청
   const addQuiz = async () => {
     const id = `${formData.category}-${formData.quizNum}`;
-    const param = {
+    const param: quizType = {
       ...formData,
       id,
       year: formData.category.split("-")[0],
@@ -131,7 +131,8 @@ function QuizForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (value === "loading") return;
-    const newFormData = {
+
+    const newFormData: quizBasicType = {
       ...formData,
       [name]: value,
     };
